@@ -4,7 +4,7 @@
     {
         protected readonly Layer Layer;
 
-        protected readonly float[] Da, Db;
+        protected readonly float[] Da, Dz, Db;
         protected readonly float[,] Dw;
 
         private int epochCount;
@@ -14,6 +14,7 @@
             Layer = layer;
 
             Da = new float[layer.a.Length];
+            Dz = new float[layer.z.Length];
             Db = new float[layer.b.Length];
             Dw = new float[layer.w.GetLength(0), layer.w.GetLength(1)];
 
@@ -24,14 +25,14 @@
         {
             for (int j = 0; j < Da.Length; j++)
             {
-                Da[j] += Calculate_da(j);
+                Da[j] = Calculate_da(j);
 
-                float dz = Layer.DerivedActivate(Layer.z[j]) * Da[j];
-                Db[j] += dz;
+                Dz[j] = Layer.DerivedActivate(Layer.z[j]) * Da[j];
+                Db[j] += Dz[j];
 
                 for (int k = 0; k < Dw.GetLength(1); k++)
                 {
-                    Dw[j, k] += Layer.a_1[k] * dz;
+                    Dw[j, k] += Layer.a_1[k] * Dz[j];
                 }
             }
 
@@ -50,8 +51,6 @@
 
                 Layer.b[j] -= Db[j] / epochCount * learnRate;
                 Db[j] = 0f;
-
-                Da[j] = 0f;
             }
             
             epochCount = 0;
@@ -64,7 +63,7 @@
             float sum = 0f;
             for (int j = 0; j < Da.Length; j++)
             {
-                sum += Layer.w[j, k] * Layer.DerivedActivate(Layer.z[j]) * Da[j];
+                sum += Layer.w[j, k] * Dz[j];
             }
 
             return sum;

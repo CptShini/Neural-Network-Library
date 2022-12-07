@@ -7,8 +7,8 @@
 
         public Datapoint(float[] inputData, float[] desiredOutput)
         {
-            DesiredOutput = desiredOutput;
             InputData = inputData;
+            DesiredOutput = desiredOutput;
         }
     }
 }

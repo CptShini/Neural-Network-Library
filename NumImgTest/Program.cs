@@ -1,6 +1,6 @@
 ﻿using Neural_Network_Library;
 using Neural_Network_Library.Backpropagation;
-using static YggdrasilCore.Printer;
+using Neural_Network_Library.NetworkTypes;
 
 namespace NumImgTest
 {
@@ -13,10 +13,21 @@ namespace NumImgTest
             Datapoint[] testset = dataset[40000..42000];
 
             int[] layers = { 784, 16, 16, 10 };
-            NeuralNetwork network = new NeuralNetwork(layers);
-            Backpropagation backpropagation = new Backpropagation(network, trainset);
+            ClassifierNetwork network = new ClassifierNetwork(layers);
+            Backpropagation backpropagation = new Backpropagation(network, trainset, testset);
 
-            backpropagation.Run(500, 100, 0.1f);
+            backpropagation.Run(5000, 100, 1f, 200);
+
+            foreach (Datapoint datapoint in testset)
+            {
+                network.Classify(datapoint.InputData);
+
+                int answer = datapoint.DesiredOutput.ToList().IndexOf(datapoint.DesiredOutput.Max());
+                int guess = network.Guess;
+                float confidence = network.Confidence;
+
+                Console.WriteLine($"{answer} | {guess} | {confidence * 100:00.00}%");
+            }
 
             /*Bitmap[] bmp = new Bitmap[dataset.Length];
             for (int i = 0; i < 200; i++)
@@ -55,7 +66,7 @@ namespace NumImgTest
                     data[j] = float.Parse(datapoints[j + 1]) / 255f;
                 }
 
-                dataset[i] = new Datapoint(answer, data);
+                dataset[i] = new Datapoint(data, answer);
             }
 
             return dataset;

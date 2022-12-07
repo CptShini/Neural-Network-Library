@@ -15,10 +15,4 @@
     <ProjectReference Include="..\Neural Network Library\Neural Network Library.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="YggdrasilCore">
-      <HintPath>..\..\YggdrasilCore\YggdrasilCore\bin\Release\net6.0\YggdrasilCore.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

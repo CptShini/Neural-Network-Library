@@ -2,6 +2,9 @@
 {
     public class ClassifierNetwork : NeuralNetwork
     {
+        public int Guess;
+        public float Confidence;
+
         public ClassifierNetwork(int[] networkStructure) : base(networkStructure)
         {
 
@@ -16,6 +19,9 @@
             {
                 input[i] /= outputSum;
             }
+
+            Confidence = input.Max();
+            Guess = input.ToList().IndexOf(Confidence);
 
             return input;
         }
