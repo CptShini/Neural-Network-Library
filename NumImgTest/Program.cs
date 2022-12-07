@@ -16,7 +16,7 @@ namespace NumImgTest
             ClassifierNetwork network = new ClassifierNetwork(layers);
             Backpropagation backpropagation = new Backpropagation(network, trainset, testset);
 
-            backpropagation.Run(5000, 100, 1f, 200);
+            backpropagation.Run(10000, 100, 0.75f, 200);
 
             foreach (Datapoint datapoint in testset)
             {

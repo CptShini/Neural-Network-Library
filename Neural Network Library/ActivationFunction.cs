@@ -23,9 +23,9 @@ namespace Neural_Network_Library
             {
                 Linear => 1f,
                 Step => 0f,
-                Sigmoid => Activate(val, type) * (1f - Activate(val, type)),
+                Sigmoid => MathF.Exp(-val) / MathF.Pow(1 + MathF.Exp(-val), 2f),
                 Tanh => 1f - MathF.Pow(MathF.Tanh(val), 2f),
-                ReLU => val < 0f ? 0f : 1f,
+                ReLU => val > 0f ? 1f : 0f,
                 _ => throw new NotImplementedException()
             };
         }

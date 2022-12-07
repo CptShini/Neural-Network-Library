@@ -8,7 +8,7 @@
 
         private readonly ActivationFunctionType activationFunctionType;
 
-        internal Layer(int inputSize, int outputSize, ActivationFunctionType activationFunctionType = ActivationFunctionType.Sigmoid)
+        internal Layer(int inputSize, int outputSize, ActivationFunctionType activationFunctionType)
         {
             a = new float[outputSize];
             z = new float[outputSize];

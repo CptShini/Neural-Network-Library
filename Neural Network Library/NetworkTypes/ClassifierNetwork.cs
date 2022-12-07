@@ -5,7 +5,7 @@
         public int Guess;
         public float Confidence;
 
-        public ClassifierNetwork(int[] networkStructure) : base(networkStructure)
+        public ClassifierNetwork(int[] networkStructure, ActivationFunctionType activationFunction = ActivationFunctionType.Sigmoid) : base(networkStructure, activationFunction)
         {
 
         }
