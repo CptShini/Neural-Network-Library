@@ -1,23 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static Neural_Network_Library.ActivationFunctionType;
 
 namespace Neural_Network_Library
 {
-    public static class ActivationFunction
+    internal static class ActivationFunction
     {
-        public static float Activate(float val, ActivationFunctionType type)
+        internal static float Activate(float val, ActivationFunctionType type)
         {
             return type switch
             {
-                ActivationFunctionType.Linear => val,
-                ActivationFunctionType.Step => val < 0 ? 0 : 1,
-                ActivationFunctionType.Sigmoid => 1 / (1 + MathF.Exp(-val)),
-                ActivationFunctionType.Tanh => MathF.Tanh(val),
-                ActivationFunctionType.ReLU => MathF.Max(0, val),
-                _ => 1 / (1 + MathF.Exp(-val))
+                Linear => val,
+                Step => val < 0f ? 0f : 1f,
+                Sigmoid => 1f / (1f + MathF.Exp(-val)),
+                Tanh => MathF.Tanh(val),
+                ReLU => val < 0f ? 0f : val,
+                _ => throw new NotImplementedException()
+            };
+        }
+
+        internal static float DerivedActive(float val, ActivationFunctionType type)
+        {
+            return type switch
+            {
+                Linear => 1f,
+                Step => 0f,
+                Sigmoid => Activate(val, type) * (1f - Activate(val, type)),
+                Tanh => 1f - MathF.Pow(MathF.Tanh(val), 2f),
+                ReLU => val < 0f ? 0f : 1f,
+                _ => throw new NotImplementedException()
             };
         }
     }

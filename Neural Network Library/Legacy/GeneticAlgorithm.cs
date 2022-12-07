@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Neural_Network_Library
+﻿namespace Neural_Network_Library.Legacy
 {
     public static class GeneticAlgorithm
     {
 
-        public static NeuralNetwork[] GenerationLap(NeuralNetwork[] networks)
+        /*public static NeuralNetworkLib[] GenerationLap(NeuralNetworkLib[] networks)
         {
             return GeneratePopulation(networks);
         }
 
-        private static NeuralNetwork[] GeneratePopulation(NeuralNetwork[] population)
+        private static NeuralNetworkLib[] GeneratePopulation(NeuralNetworkLib[] population)
         {
             int n = population.Length / 2;
 
-            NeuralNetwork[] children = CreateChildren(population, n);
+            NeuralNetworkLib[] children = CreateChildren(population, n);
             population = PurgePopulation(population, children);
 
             return population;
         }
 
-        private static NeuralNetwork[] PurgePopulation(NeuralNetwork[] population, NeuralNetwork[] children)
+        private static NeuralNetworkLib[] PurgePopulation(NeuralNetworkLib[] population, NeuralNetworkLib[] children)
         {
             population = population.OrderBy(n => n.Fitness).ToArray();
 
@@ -37,9 +31,9 @@ namespace Neural_Network_Library
             return population;
         }
 
-        private static NeuralNetwork[] CreateChildren(NeuralNetwork[] nns, int n)
+        private static NeuralNetworkLib[] CreateChildren(NeuralNetworkLib[] nns, int n)
         {
-            NeuralNetwork[] children = new NeuralNetwork[n];
+            NeuralNetworkLib[] children = new NeuralNetworkLib[n];
 
             for (int i = 0; i < n; i++)
             {
@@ -49,17 +43,17 @@ namespace Neural_Network_Library
             return children;
         }
 
-        private static NeuralNetwork CreateChild(NeuralNetwork[] nns)
+        private static NeuralNetworkLib CreateChild(NeuralNetworkLib[] nns)
         {
-            NeuralNetwork[] parents = SelectParents(nns);
-            NeuralNetwork child = new NeuralNetwork(parents[0], parents[1]);
+            NeuralNetworkLib[] parents = SelectParents(nns);
+            NeuralNetworkLib child = new NeuralNetworkLib(parents[0], parents[1]);
 
             return child;
         }
 
-        private static NeuralNetwork[] SelectParents(NeuralNetwork[] neuralNetworks)
+        private static NeuralNetworkLib[] SelectParents(NeuralNetworkLib[] neuralNetworks)
         {
-            NeuralNetwork[] parents = new NeuralNetwork[2];
+            NeuralNetworkLib[] parents = new NeuralNetworkLib[2];
 
             float totalFitness = GetTotalFitness(neuralNetworks);
 
@@ -71,24 +65,24 @@ namespace Neural_Network_Library
             return parents;
         }
 
-        private static NeuralNetwork SelectNeuralNetwork(NeuralNetwork[] neuralNetworks, float totalFitness)
+        private static NeuralNetworkLib SelectNeuralNetwork(NeuralNetworkLib[] neuralNetworks, float totalFitness)
         {
             float p = Rand(0f, totalFitness);
 
             float runningTotal = 0f;
-            foreach (NeuralNetwork nn in neuralNetworks)
+            foreach (NeuralNetworkLib nn in neuralNetworks)
             {
                 runningTotal += nn.Fitness;
                 if (runningTotal > p) { return nn; }
             }
 
-            throw new System.Exception("bruh");
+            throw new Exception("bruh");
         }
 
-        private static float GetTotalFitness(NeuralNetwork[] neuralNetworks)
+        private static float GetTotalFitness(NeuralNetworkLib[] neuralNetworks)
         {
             float totFitness = 0f;
-            foreach (NeuralNetwork nn in neuralNetworks)
+            foreach (NeuralNetworkLib nn in neuralNetworks)
             {
                 totFitness += nn.Fitness;
             }
@@ -112,7 +106,7 @@ namespace Neural_Network_Library
         public static float Remap(float value, float from1, float to1, float from2, float to2)
         {
             return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
-        }
+        }*/
 
     }
 }
