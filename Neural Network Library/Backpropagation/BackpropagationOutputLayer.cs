@@ -8,6 +8,6 @@
 
         internal void SetDesiredOutput(float[] desiredOutput) => y = desiredOutput;
 
-        protected override float Calculate_da(int k) => 2 * (Layer.a[k] - y[k]) / Layer.a.Length;
+        protected override float Calculate_da(int k) => 2 * (Layer.a[k] - y[k]);
     }
 }

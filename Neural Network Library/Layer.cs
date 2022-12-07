@@ -14,7 +14,7 @@
             z = new float[outputSize];
             b = new float[outputSize];
             w = new float[outputSize, inputSize];
-            a_1 = new float[outputSize];
+            a_1 = Array.Empty<float>();
 
             this.activationFunctionType = activationFunctionType;
 
@@ -38,7 +38,7 @@
         {
             a_1 = input;
 
-            for (int j = 0; j < z.Length; j++)
+            for (int j = 0; j < a.Length; j++)
             {
                 z[j] = b[j];
                 for (int k = 0; k < a_1.Length; k++)

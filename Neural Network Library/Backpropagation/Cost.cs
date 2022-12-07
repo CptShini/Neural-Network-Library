@@ -1,4 +1,6 @@
-﻿namespace Neural_Network_Library.Backpropagation
+﻿using System.Linq;
+
+namespace Neural_Network_Library.Backpropagation
 {
     public class Cost
     {
@@ -10,6 +12,19 @@
         {
             float cost = GetNetworkCost(dataset);
             Console.WriteLine($"Cost: {cost}");
+        }
+
+        public void PrintPrecision(Datapoint[] dataset)
+        {
+            float precisionSum = 0;
+            foreach (var datapoint in dataset)
+            {
+                var output = network.FeedForward(datapoint.InputData);
+                var guess = output.ToList().IndexOf(output.Max());
+                precisionSum += datapoint.DesiredOutput[guess];
+            }
+            var precisionPercentage = precisionSum / dataset.Length * 100;
+            Console.WriteLine($"Precision {precisionPercentage}%");
         }
 
         public float GetNetworkCost(Datapoint[] dataset)
@@ -26,12 +41,12 @@
 
         private float GetDatapointCost(Datapoint datapoint)
         {
-            network.FeedForward(datapoint.InputData);
+            var output = network.FeedForward(datapoint.InputData);
 
             float costSum = 0f;
             for (int j = 0; j < network.layers[^1].a.Length; j++)
             {
-                float a = network.layers[^1].a[j];
+                float a = output[j];
                 float y = datapoint.DesiredOutput[j];
                 float cost = a - y;
 

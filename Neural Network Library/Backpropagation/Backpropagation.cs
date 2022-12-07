@@ -3,7 +3,8 @@
     public class Backpropagation
     {
         private readonly NeuralNetwork network;
-        private readonly Datapoint[] dataset; // Manage dataset, where some is for training, some is for learning, automatically
+        private readonly Datapoint[] trainData; // Manage dataset, where some is for training, some is for learning, automatically
+        private readonly Datapoint[] testData; // Manage dataset, where some is for training, some is for learning, automatically
 
         private readonly Layer[] networkLayers;
         private readonly BackpropagationLayer[] backpropagationLayers;
@@ -11,9 +12,10 @@
 
         private Cost c;
 
-        public Backpropagation(NeuralNetwork network, Datapoint[] dataset)
+        public Backpropagation(NeuralNetwork network, Datapoint[] trainData, Datapoint[] testData)
         {
-            this.dataset = dataset;
+            this.trainData = trainData;
+            this.testData = testData;
             this.network = network;
             networkLayers = network.layers;
 
@@ -30,12 +32,17 @@
             c = new Cost(network);
         }
 
-        public void Run(int iterations, int epochSize, float learnRate)
+        public void Run(int iterations, int epochSize, float learnRate, int evaluationPeriod)
         {
             for (int i = 0; i < iterations; i++)
             {
                 Train(i, epochSize, learnRate);
-                c.PrintCost(dataset[36000..38000]); // Automatically manage this please!!
+                if (i % evaluationPeriod == 0)
+                {
+                    c.PrintCost(testData);
+                    c.PrintPrecision(testData);
+                }
+                //c.PrintCost(dataset[36000..38000]); // Automatically manage this please!!
             }
         }
 
@@ -43,8 +50,8 @@
         {
             for (int j = 0; j < epochSize; j++)
             {
-                int index = (i * epochSize + j) % dataset.Length;
-                Backpropagate(dataset[index]);
+                int index = (i * epochSize + j) % trainData.Length;
+                Backpropagate(trainData[index]);
             }
 
             for (int j = 0; j < backpropagationLayers.Length; j++)
