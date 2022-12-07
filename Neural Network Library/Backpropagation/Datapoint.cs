@@ -5,7 +5,7 @@
         public float[] DesiredOutput;
         public float[] InputData;
 
-        public Datapoint(float[] desiredOutput, float[] inputData)
+        public Datapoint(float[] inputData, float[] desiredOutput)
         {
             DesiredOutput = desiredOutput;
             InputData = inputData;
