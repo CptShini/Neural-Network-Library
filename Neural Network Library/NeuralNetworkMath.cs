@@ -59,5 +59,35 @@
                 outputVector[i] /= outputSum;
             }
         }
+
+        internal static float Convolve(float[,] input, float[,] filter, int x1, int x2, int y1, int y2)
+        {
+            float convolutionSum = 0f;
+
+            for (int i = x1; i < x2; i++)
+            {
+                for (int j = y1; j < y2; j++)
+                {
+                    convolutionSum += inputMatrix[i, j];
+                }
+            }
+
+            return convolutionSum;
+        }
+
+        internal static float MaxPool(float[,] inputMatrix, int x1, int x2, int y1, int y2)
+        {
+            float currentMax = 0f;
+
+            for (int i = x1; i < x2; i++)
+            {
+                for (int j = y1; j < y2; j++)
+                {
+                    if (inputMatrix[i, j] > currentMax) currentMax = inputMatrix[i, j];
+                }
+            }
+
+            return currentMax;
+        }
     }
 }
