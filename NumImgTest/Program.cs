@@ -11,7 +11,7 @@ namespace NumImgTest
     {
         private static void Main(string[] args)
         {
-            TestBackpropagation();
+            TestConvolutional();
         }
 
         static void TestConvolutional()
@@ -27,9 +27,9 @@ namespace NumImgTest
             SaveFloatMatrixAsBitmap(input);
 
             float[,] kernel = new float[3, 3] {
+                { 0.5f, 0, -0.5f },
                 { 1f, 0, -1f },
-                { 1f, 0, -1f },
-                { 1f, 0, -1f }
+                { 0.5f, 0, -0.5f }
             };
             ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(kernel);
 
@@ -100,7 +100,9 @@ namespace NumImgTest
 
         static void SaveFloatMatrixAsBitmap(float[,] pixels)
         {
-            Bitmap bmp = new Bitmap(28, 28);
+            int scaler = 10;
+
+            Bitmap bmp = new Bitmap(28 * scaler, 28 * scaler);
             for (int i = 0; i < pixels.GetLongLength(0); i++)
             {
                 for (int j = 0; j < pixels.GetLongLength(1); j++)
@@ -109,8 +111,13 @@ namespace NumImgTest
                     int intensity = (int)MathF.Abs(val * 255f);
                     
                     Color color = (val >= 0) ? Color.FromArgb(0, 0, intensity) : Color.FromArgb(intensity, 0, 0);
-
-                    bmp.SetPixel(i, j, color);
+                    for (int iS = 0; iS < scaler; iS++)
+                    {
+                        for (int jS = 0; jS < scaler; jS++)
+                        {
+                            bmp.SetPixel(i * scaler + iS, j * scaler + jS, color);
+                        }
+                    }
                 }
             }
             bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{DateTime.Now.Ticks}.png");

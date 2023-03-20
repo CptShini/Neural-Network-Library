@@ -2,6 +2,21 @@
 {
     internal static class NeuralNetworkMath
     {
+        internal static float MatrixDotProduct(float[,] m1, float[,] m2)
+        {
+            float dotSum = 0f;
+
+            for (int i = 0; i < m1.GetLongLength(0); i++)
+            {
+                for (int j = 0; j < m1.GetLongLength(1); j++)
+                {
+                    dotSum += m1[i, j] * m2[i, j];
+                }
+            }
+
+            return dotSum;
+        }
+
         internal static void MatrixVectorProduct(float[] outputVector, float[,] m, float[] v)
         {
             for (int j = 0; j < m.GetLongLength(0); j++)
