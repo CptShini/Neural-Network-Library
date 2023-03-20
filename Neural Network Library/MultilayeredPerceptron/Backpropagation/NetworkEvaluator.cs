@@ -1,18 +1,18 @@
-﻿namespace Neural_Network_Library.Backpropagation
+﻿namespace Neural_Network_Library.MultilayeredPerceptron.Backpropagation
 {
     internal class NetworkEvaluator
     {
-        private readonly NeuralNetwork network;
-        private float precision;
-        private float cost;
+        private readonly NeuralNetwork _network;
+        private float _precision;
+        private float _cost;
 
-        internal NetworkEvaluator(NeuralNetwork network) => this.network = network;
+        internal NetworkEvaluator(NeuralNetwork network) => _network = network;
 
-        internal void PrintCost() => Console.WriteLine($"Cost: {cost}");
+        internal void PrintCost() => Console.WriteLine($"Cost: {_cost}");
 
-        internal void PrintPrecision() => Console.WriteLine($"Precision: {precision * 100:00.00}%");
+        internal void PrintPrecision() => Console.WriteLine($"Precision: {_precision * 100:00.00}%");
 
-        internal void PrintPerformance() => Console.WriteLine($"Performance: {precision * 100:00.00}% | {cost}");
+        internal void PrintPerformance() => Console.WriteLine($"Performance: {_precision * 100:00.00}% | {_cost}");
 
         internal void Evaulate(Datapoint[] dataset)
         {
@@ -21,14 +21,14 @@
             foreach (Datapoint datapoint in dataset)
             {
                 float[] desiredOutput = datapoint.DesiredOutput;
-                float[] output = network.FeedForward(datapoint.InputData);
+                float[] output = _network.FeedForward(datapoint.InputData);
 
                 costSum += GetDatapointCost(desiredOutput, output);
                 precisionSum += GetDatapointPrecision(desiredOutput, output);
             }
 
-            cost = costSum / dataset.Length;
-            precision = precisionSum / dataset.Length;
+            _cost = costSum / dataset.Length;
+            _precision = precisionSum / dataset.Length;
         }
 
         private static float GetDatapointPrecision(float[] dersiredOutput, float[] output)

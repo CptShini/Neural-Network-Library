@@ -1,22 +1,22 @@
-﻿namespace Neural_Network_Library
+﻿namespace Neural_Network_Library.MultilayeredPerceptron
 {
     public class NeuralNetwork
     {
-        internal readonly Layer[] layers;
+        internal readonly Layer[] _layers;
 
         public NeuralNetwork(int[] networkStructure, ActivationFunctionType activationFunction = ActivationFunctionType.Sigmoid)
         {
-            layers = new Layer[networkStructure.Length - 1];
+            _layers = new Layer[networkStructure.Length - 1];
 
-            for (int i = 0; i < layers.Length; i++)
+            for (int i = 0; i < _layers.Length; i++)
             {
-                layers[i] = new Layer(networkStructure[i], networkStructure[i + 1], activationFunction);
+                _layers[i] = new Layer(networkStructure[i], networkStructure[i + 1], activationFunction);
             }
         }
 
         public float[] FeedForward(float[] input)
         {
-            foreach (Layer layer in layers)
+            foreach (Layer layer in _layers)
             {
                 input = layer.FeedForward(input);
             }

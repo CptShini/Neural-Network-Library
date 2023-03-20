@@ -1,12 +1,42 @@
 ﻿using Neural_Network_Library;
-using Neural_Network_Library.Backpropagation;
-using Neural_Network_Library.NetworkTypes;
+using Neural_Network_Library.ConvolutionalNeuralNetwork;
+using Neural_Network_Library.MultilayeredPerceptron.Backpropagation;
+using Neural_Network_Library.MultilayeredPerceptron.NetworkTypes.Classifier;
+using System.Drawing;
+using Random = Neural_Network_Library.Random;
 
 namespace NumImgTest
 {
     public class Program
     {
         private static void Main(string[] args)
+        {
+            TestBackpropagation();
+        }
+
+        static void TestConvolutional()
+        {
+            float[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv")[Random.Range(100)].InputData;
+
+            float[,] input = new float[28, 28];
+            for (int i = 0; i < dataset.Length; i++)
+            {
+                input[i / 28, i % 28] = dataset[i];
+            }
+
+            SaveFloatMatrixAsBitmap(input);
+
+            float[,] kernel = new float[3, 3] {
+                { 1f, 0, -1f },
+                { 1f, 0, -1f },
+                { 1f, 0, -1f }
+            };
+            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(kernel);
+
+            SaveFloatMatrixAsBitmap(CNN.Convolve(input));
+        }
+
+        static void TestBackpropagation()
         {
             Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
             Datapoint[] trainset = dataset[0..40000];
@@ -16,35 +46,15 @@ namespace NumImgTest
             ClassifierNetwork network = new ClassifierNetwork(layers);
             Backpropagation backpropagation = new Backpropagation(network, trainset, testset);
 
-            backpropagation.Run(10000, 100, 0.75f, 200);
+            backpropagation.Run(10000, 100, 0.5f, 200);
 
             foreach (Datapoint datapoint in testset)
             {
-                network.Classify(datapoint.InputData);
+                ClassifierGuess guess = network.Classify(datapoint.InputData);
 
                 int answer = datapoint.DesiredOutput.ToList().IndexOf(datapoint.DesiredOutput.Max());
-                int guess = network.Guess;
-                float confidence = network.Confidence;
-
-                Console.WriteLine($"{answer} | {guess} | {confidence * 100:00.00}%");
+                Console.WriteLine($"{answer} | {guess.GuessIndex} | {guess.GuessConfidence * 100:00}%");
             }
-
-            /*Bitmap[] bmp = new Bitmap[dataset.Length];
-            for (int i = 0; i < 200; i++)
-            {
-                bmp[i] = new Bitmap(28, 28);
-                for (int j = 1; j < dataset[i].Length; j++)
-                {
-                    int val = dataset[i][j];
-
-                    int x = (j - 1) % 28;
-                    int y = (j - 1) / 28;
-                    Color color = Color.FromArgb(val, val, val);
-
-                    bmp[i].SetPixel(x, y, color);
-                }
-                bmp[i].Save($@"C:\Users\gabri\Desktop\TestFolder\{dataset[i][0]}-{DateTime.Now.Ticks}.png");
-            }*/
         }
 
         static Datapoint[] ImportDataset(string path)
@@ -70,6 +80,40 @@ namespace NumImgTest
             }
 
             return dataset;
+        }
+        
+        static void SaveFloatArrayAsBitmap(float[] pixels)
+        {
+            Bitmap bmp = new Bitmap(28, 28);
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                int val = (int)(pixels[i] * 255f);
+
+                int x = i % 28;
+                int y = i / 28;
+                Color color = Color.FromArgb(val, val, val);
+
+                bmp.SetPixel(x, y, color);
+            }
+            bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{DateTime.Now.Ticks}.png");
+        }
+
+        static void SaveFloatMatrixAsBitmap(float[,] pixels)
+        {
+            Bitmap bmp = new Bitmap(28, 28);
+            for (int i = 0; i < pixels.GetLongLength(0); i++)
+            {
+                for (int j = 0; j < pixels.GetLongLength(1); j++)
+                {
+                    float val = pixels[j, i];
+                    int intensity = (int)MathF.Abs(val * 255f);
+                    
+                    Color color = (val >= 0) ? Color.FromArgb(0, 0, intensity) : Color.FromArgb(intensity, 0, 0);
+
+                    bmp.SetPixel(i, j, color);
+                }
+            }
+            bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{DateTime.Now.Ticks}.png");
         }
     }
 }

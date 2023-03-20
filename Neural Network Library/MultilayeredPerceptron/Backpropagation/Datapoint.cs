@@ -1,9 +1,9 @@
-﻿namespace Neural_Network_Library.Backpropagation
+﻿namespace Neural_Network_Library.MultilayeredPerceptron.Backpropagation
 {
     public class Datapoint
     {
-        public float[] DesiredOutput;
-        public float[] InputData;
+        public readonly float[] DesiredOutput;
+        public readonly float[] InputData;
 
         public Datapoint(float[] inputData, float[] desiredOutput)
         {

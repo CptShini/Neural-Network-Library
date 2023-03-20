@@ -29,6 +29,22 @@ namespace Neural_Network_Library
                 _ => throw new NotImplementedException()
             };
         }
+
+        internal static void Activate(float[] outputVector, float[] inputVector, ActivationFunctionType type)
+        {
+            for (int i = 0; i < outputVector.Length; i++)
+            {
+                outputVector[i] = Activate(inputVector[i], type);
+            }
+        }
+
+        internal static void DerivedActive(float[] outputVector, float[] inputVector, ActivationFunctionType type)
+        {
+            for (int i = 0; i < outputVector.Length; i++)
+            {
+                outputVector[i] = DerivedActive(inputVector[i], type);
+            }
+        }
     }
 
     public enum ActivationFunctionType { Step, Linear, Sigmoid, Tanh, ReLU };
