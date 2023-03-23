@@ -26,14 +26,18 @@ namespace NumImgTest
 
             SaveFloatMatrixAsBitmap(input);
 
-            float[,] kernel = new float[3, 3] {
-                { 0.5f, 0, -0.5f },
-                { 1f, 0, -1f },
-                { 0.5f, 0, -0.5f }
-            };
-            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(kernel);
 
-            SaveFloatMatrixAsBitmap(CNN.Convolve(input));
+            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork();
+            CNN.AddLayer(2, 5, ActivationFunctionType.ReLU);
+            CNN.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
+            CNN.InitializeConvolutionalNeuralNetwork();
+
+            float[][,] output = CNN.GetOutputs(input);
+
+            for (int i = 0; i < output.Length; i++)
+            {
+                SaveFloatMatrixAsBitmap(output[i]);
+            }
         }
 
         static void TestBackpropagation()
@@ -109,7 +113,8 @@ namespace NumImgTest
                 {
                     float val = pixels[j, i];
                     int intensity = (int)MathF.Abs(val * 255f);
-                    
+                    intensity = (int)MathF.Min(intensity, 255);
+
                     Color color = (val >= 0) ? Color.FromArgb(0, 0, intensity) : Color.FromArgb(intensity, 0, 0);
                     for (int iS = 0; iS < scaler; iS++)
                     {

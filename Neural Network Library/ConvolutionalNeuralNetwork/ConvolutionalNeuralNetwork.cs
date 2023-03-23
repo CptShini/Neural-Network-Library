@@ -2,64 +2,55 @@
 {
     public class ConvolutionalNeuralNetwork
     {
-        private readonly float[,] _kernel;
-        private readonly int _kernelSize;
-        private readonly int _kernelSizeDelta;
+        private readonly List<int> _layerFilters;
+        private readonly List<int> _layerKernelSizes;
+        private readonly List<ActivationFunctionType> _layerActivationFunctionTypes;
 
-        private int _inputWidth;
-        private int _inputHeight;
+        private readonly List<ConvolutionalLayer> _layers;
 
-        public ConvolutionalNeuralNetwork(float[,] kernel)
+        private bool _initialized = false;
+
+        public ConvolutionalNeuralNetwork()
         {
-            _kernel = kernel;
-            _kernelSize = kernel.GetLength(0);
-            _kernelSizeDelta = (int)((_kernelSize / 2) - 0.5f);
+            _layers = new List<ConvolutionalLayer>();
+            _layerFilters = new List<int>();
+            _layerKernelSizes = new List<int>();
+            _layerActivationFunctionTypes = new List<ActivationFunctionType>();
         }
 
-        public float[,] Convolve(float[,] input)
+        public void AddLayer(int nFilters, int kernelSize, ActivationFunctionType activationFunctionType)
         {
-            _inputWidth = input.GetLength(0);
-            _inputHeight = input.GetLength(1);
+            _layerFilters.Add(nFilters);
+            _layerKernelSizes.Add(kernelSize);
+            _layerActivationFunctionTypes.Add(activationFunctionType);
+        }
 
-            float[,] convolution = new float[_inputWidth, _inputHeight];
+        public void InitializeConvolutionalNeuralNetwork()
+        {
+            ConvolutionalLayer layer = new ConvolutionalLayer(1, _layerFilters[0], _layerKernelSizes[0], _layerActivationFunctionTypes[0]);
+            _layers.Add(layer);
 
-            for (int x = 0; x < _inputWidth; x++)
+            for (int i = 1; i < _layerFilters.Count; i++)
             {
-                for (int y = 0; y < _inputHeight; y++)
-                {
-                    Tuple<float, int> convolutionResult = ConvolveAt(x, y, input);
-                    convolution[x, y] = convolutionResult.Item1 / convolutionResult.Item2;
-                }
+                layer = new ConvolutionalLayer(_layerFilters[i - 1], _layerFilters[i], _layerKernelSizes[i], _layerActivationFunctionTypes[i]);
+                _layers.Add(layer);
             }
 
-            return convolution;
+            _initialized = true;
         }
 
-        private Tuple<float, int> ConvolveAt(int x, int y, float[,] input)
+        public float[][,] GetOutputs(float[,] input)
         {
-            int cellsScanned = 0;
-            float convolutionSum = 0f;
+            if (!_initialized) return null;
 
-            for (int i = 0; i < _kernelSize; i++)
+            float[][,] output = new float[][,] { input };
+
+            foreach (ConvolutionalLayer layer in _layers)
             {
-                for (int j = 0; j < _kernelSize; j++)
-                {
-                    int offsetX = i - _kernelSizeDelta;
-                    int offsetY = j - _kernelSizeDelta;
-
-                    int pixelX = x + offsetX;
-                    int pixelY = y + offsetY;
-
-                    if (OutsideBounds(pixelX, pixelY)) continue;
-
-                    convolutionSum += input[pixelX, pixelY] * _kernel[i, j];
-                    cellsScanned++;
-                }
+                output = layer.Process(output);
             }
 
-            return new Tuple<float, int>(convolutionSum, cellsScanned);
+            return output;
         }
-
-        private bool OutsideBounds(int pixelX, int pixelY) => pixelX < 0 || pixelY < 0 || pixelX >= _inputWidth || pixelY >= _inputHeight;
     }
 }

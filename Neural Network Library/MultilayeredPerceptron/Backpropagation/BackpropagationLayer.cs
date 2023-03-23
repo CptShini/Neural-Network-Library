@@ -69,6 +69,6 @@
             return sum;
         }
 
-        private float DerivedActivate(float val) => ActivationFunction.DerivedActive(val, _layer._activationFunctionType);
+        private float DerivedActivate(float val) => ActivationFunction.DerivedActivate(val, _layer._activationFunctionType);
     }
 }

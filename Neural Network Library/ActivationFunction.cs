@@ -17,7 +17,7 @@ namespace Neural_Network_Library
             };
         }
 
-        internal static float DerivedActive(float val, ActivationFunctionType type)
+        internal static float DerivedActivate(float val, ActivationFunctionType type)
         {
             return type switch
             {
@@ -38,11 +38,33 @@ namespace Neural_Network_Library
             }
         }
 
-        internal static void DerivedActive(float[] outputVector, float[] inputVector, ActivationFunctionType type)
+        internal static void DerivedActivate(float[] outputVector, float[] inputVector, ActivationFunctionType type)
         {
             for (int i = 0; i < outputVector.Length; i++)
             {
-                outputVector[i] = DerivedActive(inputVector[i], type);
+                outputVector[i] = DerivedActivate(inputVector[i], type);
+            }
+        }
+
+        internal static void Activate(float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type)
+        {
+            for (int i = 0; i < outputMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < outputMatrix.GetLength(1); j++)
+                {
+                    outputMatrix[i, j] = Activate(inputMatrix[i, j], type);
+                }
+            }
+        }
+
+        internal static void DerivedActivate(float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type)
+        {
+            for (int i = 0; i < outputMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < outputMatrix.GetLength(1); j++)
+                {
+                    outputMatrix[i, j] = DerivedActivate(inputMatrix[i, j], type);
+                }
             }
         }
     }
