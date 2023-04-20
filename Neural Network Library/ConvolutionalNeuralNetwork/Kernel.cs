@@ -4,27 +4,26 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 {
     internal class Kernel
     {
-        private readonly float[][,] _filter;
-        private float _bias;
-        private readonly ActivationFunctionType _activationFunctionType;
-
         private readonly int _nFilters;
         private readonly int _kernelSize;
         private readonly int _kernelSizeDelta;
+        private readonly ActivationFunctionType _activationFunctionType;
+
+        private readonly float[][,] _filter;
+        private float _bias;
 
         internal Kernel(int kernelSize, int nFilters, ActivationFunctionType activationFunctionType)
         {
+            _nFilters = nFilters;
             _kernelSize = kernelSize;
             _kernelSizeDelta = (int)(kernelSize / 2f - 0.5f);
-
-            _nFilters = nFilters;
-            _filter = new float[nFilters][,];
-            InitializeFilters();
-
             _activationFunctionType = activationFunctionType;
+
+            _filter = new float[nFilters][,];
+            InitializeFiltersAndBias();
         }
 
-        private void InitializeFilters()
+        private void InitializeFiltersAndBias()
         {
             for (int i = 0; i < _nFilters; i++)
             {

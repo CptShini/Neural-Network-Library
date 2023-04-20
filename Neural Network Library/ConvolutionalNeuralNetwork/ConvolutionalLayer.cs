@@ -2,39 +2,42 @@
 {
     internal class ConvolutionalLayer
     {
-        private readonly int _depth;
-        private readonly int _nFilters;
+        private readonly int _nKernels;
         private readonly int _kernelSize;
         private readonly ActivationFunctionType _activationFunctionType;
 
+        private readonly int _nInputs;
+        private readonly int _poolSize;
+
         private readonly Kernel[] _kernels;
 
-        private readonly int _poolSize = 2;
-
-        internal ConvolutionalLayer(int depth, int nFilters, int kernelSize, ActivationFunctionType activationType)
+        internal ConvolutionalLayer(int nInputs, int nKernels, int kernelSize, ActivationFunctionType activationType)
         {
-            _depth = depth;
-            _nFilters = nFilters;
+            _nInputs = nInputs;
+            _nKernels = nKernels;
             _kernelSize = kernelSize;
             _activationFunctionType = activationType;
-            _kernels = new Kernel[nFilters];
+
+            _poolSize = 2;
+
+            _kernels = new Kernel[nKernels];
 
             InitializeKernels();
         }
 
         private void InitializeKernels()
         {
-            for (int i = 0; i < _nFilters; i++)
+            for (int i = 0; i < _nKernels; i++)
             {
-                _kernels[i] = new Kernel(_kernelSize, _depth, _activationFunctionType);
+                _kernels[i] = new Kernel(_kernelSize, _nInputs, _activationFunctionType);
             }
         }
 
         internal float[][,] Process(float[][,] input)
         {
-            float[][,] outputs = new float[_nFilters][,];
+            float[][,] outputs = new float[_nKernels][,];
 
-            for (int i = 0; i < _nFilters; i++)
+            for (int i = 0; i < _nKernels; i++)
             {
                 outputs[i] = _kernels[i].ApplyFilters(input);
                 outputs[i] = MaxPool(outputs[i]);

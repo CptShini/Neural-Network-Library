@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Neural_Network_Library.MultilayeredPerceptron.NetworkTypes.Classifier
+﻿namespace Neural_Network_Library.MultilayeredPerceptron.NetworkTypes.Classifier
 {
-    public class ClassifierGuess
+    public struct ClassifierGuess
     {
-        public int GuessIndex;
-        public float GuessConfidence;
-        public float[]? Outputs;
+        public readonly int GuessIndex;
+        public readonly float GuessConfidence;
+        public readonly float[] Outputs;
+
+        public ClassifierGuess(float[] networkOutput)
+        {
+            GuessConfidence = networkOutput.Max();
+            GuessIndex = networkOutput.ToList().IndexOf(GuessConfidence);
+            Outputs = networkOutput;
+        }
     }
 }

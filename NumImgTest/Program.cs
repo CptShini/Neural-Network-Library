@@ -1,5 +1,6 @@
 ﻿using Neural_Network_Library;
 using Neural_Network_Library.ConvolutionalNeuralNetwork;
+using Neural_Network_Library.MultilayeredPerceptron;
 using Neural_Network_Library.MultilayeredPerceptron.Backpropagation;
 using Neural_Network_Library.MultilayeredPerceptron.NetworkTypes.Classifier;
 using System.Drawing;
@@ -27,10 +28,11 @@ namespace NumImgTest
             SaveFloatMatrixAsBitmap(input);
 
 
-            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork();
-            CNN.AddLayer(2, 5, ActivationFunctionType.ReLU);
-            CNN.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
-            CNN.InitializeConvolutionalNeuralNetwork();
+            CNNStructure CNNStructure = new CNNStructure();
+            CNNStructure.AddLayer(2, 5, ActivationFunctionType.ReLU);
+            CNNStructure.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
+
+            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(CNNStructure);
 
             float[][,] output = CNN.GetOutputs(input);
 
@@ -47,14 +49,15 @@ namespace NumImgTest
             Datapoint[] testset = dataset[40000..42000];
 
             int[] layers = { 784, 16, 16, 10 };
-            ClassifierNetwork network = new ClassifierNetwork(layers);
-            Backpropagation backpropagation = new Backpropagation(network, trainset, testset);
+            NeuralNetwork neuralNetwork = new NeuralNetwork(layers);
+            ClassifierNetwork classifierNetwork = new ClassifierNetwork(neuralNetwork);
+            Backpropagation backpropagation = new Backpropagation(neuralNetwork, trainset, testset);
 
             backpropagation.Run(10000, 100, 0.5f, 200);
 
             foreach (Datapoint datapoint in testset)
             {
-                ClassifierGuess guess = network.Classify(datapoint.InputData);
+                ClassifierGuess guess = classifierNetwork.Classify(datapoint.InputData);
 
                 int answer = datapoint.DesiredOutput.ToList().IndexOf(datapoint.DesiredOutput.Max());
                 Console.WriteLine($"{answer} | {guess.GuessIndex} | {guess.GuessConfidence * 100:00}%");

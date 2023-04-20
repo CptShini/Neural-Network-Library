@@ -8,6 +8,10 @@
 
         internal NetworkEvaluator(NeuralNetwork network) => _network = network;
 
+        internal float GetPrecision() => _precision;
+
+        internal float GetCost() => _cost;
+
         internal void PrintCost() => Console.WriteLine($"Cost: {_cost}");
 
         internal void PrintPrecision() => Console.WriteLine($"Precision: {_precision * 100:00.00}%");

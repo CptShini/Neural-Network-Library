@@ -51,12 +51,12 @@
             }
         }
 
-        internal static void NormalizeVector(float[] outputVector)
+        internal static void NormalizeVector(float[] outputVector, float[] inputVector)
         {
-            float outputSum = outputVector.Sum();
-            for (int i = 0; i < outputVector.Length; i++)
+            float inputSum = inputVector.Sum();
+            for (int i = 0; i < inputVector.Length; i++)
             {
-                outputVector[i] /= outputSum;
+                outputVector[i] = inputVector[i] / inputSum;
             }
         }
     }

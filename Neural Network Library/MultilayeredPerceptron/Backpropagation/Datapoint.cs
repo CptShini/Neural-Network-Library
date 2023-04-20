@@ -1,6 +1,6 @@
 ﻿namespace Neural_Network_Library.MultilayeredPerceptron.Backpropagation
 {
-    public class Datapoint
+    public struct Datapoint
     {
         public readonly float[] DesiredOutput;
         public readonly float[] InputData;

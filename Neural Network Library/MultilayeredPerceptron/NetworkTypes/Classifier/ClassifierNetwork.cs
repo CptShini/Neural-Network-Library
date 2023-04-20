@@ -2,25 +2,18 @@
 
 namespace Neural_Network_Library.MultilayeredPerceptron.NetworkTypes.Classifier
 {
-    public class ClassifierNetwork : NeuralNetwork
+    public class ClassifierNetwork
     {
-        public ClassifierNetwork(int[] networkStructure, ActivationFunctionType activationFunction = ActivationFunctionType.Sigmoid) : base(networkStructure, activationFunction)
-        {
+        private readonly NeuralNetwork _neuralNetwork;
 
-        }
+        public ClassifierNetwork(NeuralNetwork neuralNetwork) => _neuralNetwork = neuralNetwork;
 
         public ClassifierGuess Classify(float[] input)
         {
-            input = FeedForward(input);
-            NormalizeVector(input);
+            input = _neuralNetwork.FeedForward(input);
+            NormalizeVector(input, input);
 
-            float confidence = input.Max();
-            return new ClassifierGuess
-            {
-                GuessConfidence = confidence,
-                GuessIndex = input.ToList().IndexOf(confidence),
-                Outputs = input
-            };
+            return new ClassifierGuess(input);
         }
     }
 }
