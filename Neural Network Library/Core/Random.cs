@@ -1,4 +1,4 @@
-﻿namespace Neural_Network_Library
+﻿namespace Neural_Network_Library.Core
 {
     public static class Random
     {

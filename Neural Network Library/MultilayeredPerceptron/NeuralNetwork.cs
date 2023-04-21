@@ -1,4 +1,6 @@
-﻿namespace Neural_Network_Library.MultilayeredPerceptron
+﻿using Neural_Network_Library.Core;
+
+namespace Neural_Network_Library.MultilayeredPerceptron
 {
     public class NeuralNetwork
     {

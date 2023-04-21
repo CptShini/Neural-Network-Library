@@ -1,39 +1,37 @@
-﻿namespace Neural_Network_Library.ConvolutionalNeuralNetwork
+﻿using Neural_Network_Library.Core;
+
+namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 {
     public class CNNStructure
     {
-        private readonly List<int> _layerKernels;
-        private readonly List<int> _layerKernelSizes;
-        private readonly List<ActivationFunctionType> _layerActivationFunctionTypes;
+        private readonly List<CNNLayerData> _layerData;
 
-        public CNNStructure()
-        {
-            _layerKernels = new List<int>();
-            _layerKernelSizes = new List<int>();
-            _layerActivationFunctionTypes = new List<ActivationFunctionType>();
-        }
+        public CNNStructure() => _layerData = new List<CNNLayerData>();
 
-        public void AddLayer(int nKernels, int kernelSize, ActivationFunctionType activationFunctionType)
-        {
-            _layerKernels.Add(nKernels);
-            _layerKernelSizes.Add(kernelSize);
-            _layerActivationFunctionTypes.Add(activationFunctionType);
-        }
+        public void AddLayer(int nKernels, int kernelSize, ActivationFunctionType activationFunctionType) => _layerData.Add(new CNNLayerData(nKernels, kernelSize, activationFunctionType));
 
         internal ConvolutionalLayer[] GetLayerStructure()
         {
-            List<ConvolutionalLayer> layers = new List<ConvolutionalLayer>();
+            List<ConvolutionalLayer> layers = new List<ConvolutionalLayer> { new ConvolutionalLayer(1, _layerData[0]) };
 
-            ConvolutionalLayer layer = new ConvolutionalLayer(1, _layerKernels[0], _layerKernelSizes[0], _layerActivationFunctionTypes[0]);
-            layers.Add(layer);
-
-            for (int i = 1; i < _layerKernels.Count; i++)
+            for (int i = 1; i < _layerData.Count; i++)
             {
-                layer = new ConvolutionalLayer(_layerKernels[i - 1], _layerKernels[i], _layerKernelSizes[i], _layerActivationFunctionTypes[i]);
-                layers.Add(layer);
+                layers.Add(new ConvolutionalLayer(_layerData[i - 1]._nKernels, _layerData[i]));
             }
 
             return layers.ToArray();
+        }
+
+        internal int GetFCLayerInputSize(int inputSize)
+        {
+            int finalCNNLayerOutputSize = inputSize;
+            foreach (CNNLayerData layer in _layerData)
+            {
+                finalCNNLayerOutputSize = (inputSize - (layer._kernelSize - 1)) / 2;
+            }
+
+            int outputSize = finalCNNLayerOutputSize * _layerData[^1]._nKernels;
+            return outputSize;
         }
     }
 }

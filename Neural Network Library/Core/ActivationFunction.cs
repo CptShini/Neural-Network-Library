@@ -1,6 +1,6 @@
-﻿using static Neural_Network_Library.ActivationFunctionType;
+﻿using static Neural_Network_Library.Core.ActivationFunctionType;
 
-namespace Neural_Network_Library
+namespace Neural_Network_Library.Core
 {
     internal static class ActivationFunction
     {

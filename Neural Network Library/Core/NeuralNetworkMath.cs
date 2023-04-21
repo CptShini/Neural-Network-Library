@@ -1,4 +1,4 @@
-﻿namespace Neural_Network_Library
+﻿namespace Neural_Network_Library.Core
 {
     internal static class NeuralNetworkMath
     {
@@ -58,6 +58,27 @@
             {
                 outputVector[i] = inputVector[i] / inputSum;
             }
+        }
+
+        internal static float[] Flatten(float[][,] input)
+        {
+            int inputSize = input[0].GetLength(0);
+            int outputLength = input.Length * inputSize * inputSize;
+            float[] output = new float[outputLength];
+
+            int n = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                for (int x = 0; x < inputSize; x++)
+                {
+                    for (int y = 0; y < inputSize; y++)
+                    {
+                        output[n++] = input[i][x, y];
+                    }
+                }
+            }
+
+            return output;
         }
     }
 }

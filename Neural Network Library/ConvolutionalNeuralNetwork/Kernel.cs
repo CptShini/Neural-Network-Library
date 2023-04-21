@@ -1,10 +1,12 @@
-﻿using static Neural_Network_Library.NeuralNetworkMath;
+﻿using Neural_Network_Library.Core;
+using static Neural_Network_Library.Core.ActivationFunction;
+using Random = Neural_Network_Library.Core.Random;
 
 namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 {
     internal class Kernel
     {
-        private readonly int _nFilters;
+        private readonly int _depth;
         private readonly int _kernelSize;
         private readonly int _kernelSizeDelta;
         private readonly ActivationFunctionType _activationFunctionType;
@@ -12,20 +14,24 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
         private readonly float[][,] _filter;
         private float _bias;
 
-        internal Kernel(int kernelSize, int nFilters, ActivationFunctionType activationFunctionType)
+        private float[][,] _input;
+
+        internal Kernel(int depth, int kernelSize, ActivationFunctionType activationFunctionType)
         {
-            _nFilters = nFilters;
+            _depth = depth;
             _kernelSize = kernelSize;
-            _kernelSizeDelta = (int)(kernelSize / 2f - 0.5f);
+            _kernelSizeDelta = (int)((kernelSize - 1) / 2f);
             _activationFunctionType = activationFunctionType;
 
-            _filter = new float[nFilters][,];
+            _filter = new float[depth][,];
             InitializeFiltersAndBias();
+
+            _input = new float[depth][,];
         }
 
         private void InitializeFiltersAndBias()
         {
-            for (int i = 0; i < _nFilters; i++)
+            for (int i = 0; i < _depth; i++)
             {
                 _filter[i] = new float[_kernelSize, _kernelSize];
                 for (int x = 0; x < _kernelSize; x++)
@@ -40,8 +46,9 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             _bias = Random.Range(-1f, 1f);
         }
 
-        internal float[,] ApplyFilters(float[][,] input)
+        internal float[,] Convolve(float[][,] input)
         {
+            _input = input;
             int inputSize = input[0].GetLength(0);
 
             int convolutionSize = inputSize - 2 * _kernelSizeDelta;
@@ -51,32 +58,31 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             {
                 for (int y = 0; y < convolutionSize; y++)
                 {
-                    int cellX = x + _kernelSizeDelta;
-                    int cellY = y + _kernelSizeDelta;
-
-                    convolution[x, y] = ConvolveAt(input, cellX, cellY);
+                    convolution[x, y] = ApplyFilters(x, y);
                 }
             }
 
             return convolution;
         }
 
-        private float ConvolveAt(float[][,] input, int cellX, int cellY)
+        private float ApplyFilters(int x, int y)
         {
-            float convolutionSum = 0f;
+            int inputX = x + _kernelSizeDelta;
+            int inputY = y + _kernelSizeDelta;
 
-            for (int i = 0; i < _nFilters; i++)
+            float convolutionSum = 0f;
+            for (int i = 0; i < _depth; i++)
             {
-                convolutionSum += ConvolveAtForSpecific(input[i], cellX, cellY, _filter[i]);
+                convolutionSum += ConvolveAtDepth(i, inputX, inputY);
             }
 
             float z = convolutionSum + _bias;
-            float a = ActivationFunction.Activate(z, _activationFunctionType);
+            float a = Activate(z, _activationFunctionType);
 
             return a;
         }
 
-        private float ConvolveAtForSpecific(float[,] input, int cellX, int cellY, float[,] _filter)
+        private float ConvolveAtDepth(int depthIndex, int inputX, int inputY)
         {
             float convolutionSum = 0f;
 
@@ -87,10 +93,10 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
                     int offsetX = i - _kernelSizeDelta;
                     int offsetY = j - _kernelSizeDelta;
 
-                    int offsetCellPosX = cellX + offsetX;
-                    int offsetCellPosY = cellY + offsetY;
+                    int offsetInputX = inputX + offsetX;
+                    int offsetInputY = inputY + offsetY;
 
-                    convolutionSum += input[offsetCellPosX, offsetCellPosY] * _filter[i, j];
+                    convolutionSum += _input[depthIndex][offsetInputX, offsetInputY] * _filter[depthIndex][i, j];
                 }
             }
 

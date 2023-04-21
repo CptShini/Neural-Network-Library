@@ -1,4 +1,4 @@
-﻿namespace Neural_Network_Library.MultilayeredPerceptron.NetworkTypes.Classifier
+﻿namespace Neural_Network_Library.Classifier
 {
     public struct ClassifierGuess
     {

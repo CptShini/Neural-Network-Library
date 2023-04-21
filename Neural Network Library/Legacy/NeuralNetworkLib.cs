@@ -1,4 +1,7 @@
-﻿namespace Neural_Network_Library.Legacy
+﻿using Neural_Network_Library.Core;
+using Random = Neural_Network_Library.Core.Random;
+
+namespace Neural_Network_Library.Legacy
 {
     public class NeuralNetworkLib
     {

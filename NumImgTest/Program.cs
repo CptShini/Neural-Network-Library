@@ -1,10 +1,10 @@
-﻿using Neural_Network_Library;
+﻿using Neural_Network_Library.Classifier;
 using Neural_Network_Library.ConvolutionalNeuralNetwork;
+using Neural_Network_Library.Core;
 using Neural_Network_Library.MultilayeredPerceptron;
 using Neural_Network_Library.MultilayeredPerceptron.Backpropagation;
-using Neural_Network_Library.MultilayeredPerceptron.NetworkTypes.Classifier;
 using System.Drawing;
-using Random = Neural_Network_Library.Random;
+using Random = Neural_Network_Library.Core.Random;
 
 namespace NumImgTest
 {
@@ -25,21 +25,17 @@ namespace NumImgTest
                 input[i / 28, i % 28] = dataset[i];
             }
 
-            SaveFloatMatrixAsBitmap(input);
+            SaveFloatMatrixAsBitmap(input, "Input");
 
 
             CNNStructure CNNStructure = new CNNStructure();
             CNNStructure.AddLayer(2, 5, ActivationFunctionType.ReLU);
             CNNStructure.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
 
-            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(CNNStructure);
+            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, CNNStructure);
 
-            float[][,] output = CNN.GetOutputs(input);
-
-            for (int i = 0; i < output.Length; i++)
-            {
-                SaveFloatMatrixAsBitmap(output[i]);
-            }
+            ClassifierGuess output = Classifier.Classify(input, CNN);
+            Console.WriteLine($"{output.GuessIndex} | {output.GuessConfidence * 100:00.00}%");
         }
 
         static void TestBackpropagation()
@@ -50,14 +46,13 @@ namespace NumImgTest
 
             int[] layers = { 784, 16, 16, 10 };
             NeuralNetwork neuralNetwork = new NeuralNetwork(layers);
-            ClassifierNetwork classifierNetwork = new ClassifierNetwork(neuralNetwork);
             Backpropagation backpropagation = new Backpropagation(neuralNetwork, trainset, testset);
 
             backpropagation.Run(10000, 100, 0.5f, 200);
 
             foreach (Datapoint datapoint in testset)
             {
-                ClassifierGuess guess = classifierNetwork.Classify(datapoint.InputData);
+                ClassifierGuess guess = Classifier.Classify(datapoint.InputData, neuralNetwork);
 
                 int answer = datapoint.DesiredOutput.ToList().IndexOf(datapoint.DesiredOutput.Max());
                 Console.WriteLine($"{answer} | {guess.GuessIndex} | {guess.GuessConfidence * 100:00}%");
@@ -105,7 +100,7 @@ namespace NumImgTest
             bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{DateTime.Now.Ticks}.png");
         }
 
-        static void SaveFloatMatrixAsBitmap(float[,] pixels)
+        static void SaveFloatMatrixAsBitmap(float[,] pixels, string name)
         {
             int scaler = 10;
 
@@ -115,10 +110,10 @@ namespace NumImgTest
                 for (int j = 0; j < pixels.GetLongLength(1); j++)
                 {
                     float val = pixels[j, i];
-                    int intensity = (int)MathF.Abs(val * 255f);
+                    int intensity = (int)(val * 255);
                     intensity = (int)MathF.Min(intensity, 255);
 
-                    Color color = (val >= 0) ? Color.FromArgb(0, 0, intensity) : Color.FromArgb(intensity, 0, 0);
+                    Color color = (val <= 255) ? Color.FromArgb(intensity, intensity, intensity) : Color.FromArgb(255, 0, 0);
                     for (int iS = 0; iS < scaler; iS++)
                     {
                         for (int jS = 0; jS < scaler; jS++)
@@ -128,7 +123,7 @@ namespace NumImgTest
                     }
                 }
             }
-            bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{DateTime.Now.Ticks}.png");
+            bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{name}.png");
         }
     }
 }
