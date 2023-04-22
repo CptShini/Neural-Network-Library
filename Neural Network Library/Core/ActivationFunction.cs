@@ -4,20 +4,20 @@ namespace Neural_Network_Library.Core
 {
     internal static class ActivationFunction
     {
-        internal static float Activate(float val, ActivationFunctionType type)
+        private static float Activate(float val, ActivationFunctionType type)
         {
             return type switch
             {
                 Linear => val,
-                Step => val < 0f ? 0f : 1f,
+                Step => val <= 0f ? 0f : 1f,
                 Sigmoid => 1f / (1f + MathF.Exp(-val)),
                 Tanh => MathF.Tanh(val),
-                ReLU => val < 0f ? 0f : val,
+                ReLU => val <= 0f ? 0f : val,
                 _ => throw new NotImplementedException()
             };
         }
 
-        internal static float DerivedActivate(float val, ActivationFunctionType type)
+        private static float DerivedActivate(float val, ActivationFunctionType type)
         {
             return type switch
             {
@@ -30,40 +30,24 @@ namespace Neural_Network_Library.Core
             };
         }
 
-        internal static void Activate(float[] outputVector, float[] inputVector, ActivationFunctionType type)
+        internal static float Activate(float val, ActivationFunctionType type, bool useDerivedActivation = false) =>
+            !useDerivedActivation ? Activate(val, type) : DerivedActivate(val, type);
+
+        internal static void Activate(float[] outputVector, float[] inputVector, ActivationFunctionType type, bool useDerivedActivation = false)
         {
             for (int i = 0; i < outputVector.Length; i++)
             {
-                outputVector[i] = Activate(inputVector[i], type);
+                outputVector[i] = Activate(inputVector[i], type, useDerivedActivation);
             }
         }
 
-        internal static void DerivedActivate(float[] outputVector, float[] inputVector, ActivationFunctionType type)
-        {
-            for (int i = 0; i < outputVector.Length; i++)
-            {
-                outputVector[i] = DerivedActivate(inputVector[i], type);
-            }
-        }
-
-        internal static void Activate(float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type)
+        internal static void Activate(float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type, bool useDerivedActivation = false)
         {
             for (int i = 0; i < outputMatrix.GetLength(0); i++)
             {
                 for (int j = 0; j < outputMatrix.GetLength(1); j++)
                 {
-                    outputMatrix[i, j] = Activate(inputMatrix[i, j], type);
-                }
-            }
-        }
-
-        internal static void DerivedActivate(float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type)
-        {
-            for (int i = 0; i < outputMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < outputMatrix.GetLength(1); j++)
-                {
-                    outputMatrix[i, j] = DerivedActivate(inputMatrix[i, j], type);
+                    outputMatrix[i, j] = Activate(inputMatrix[i, j], type, useDerivedActivation);
                 }
             }
         }
