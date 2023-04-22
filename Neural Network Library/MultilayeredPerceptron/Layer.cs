@@ -42,15 +42,14 @@ namespace Neural_Network_Library.MultilayeredPerceptron
         internal float[] FeedForward(float[] input)
         {
             _a_1 = input;
-
+            
             MatrixVectorProduct(_z, _w, _a_1);
             AddVectors(_z, _z, _b);
             Activate(_a, _z);
-
+            
             return _a;
         }
 
         private void Activate(float[] outputVector, float[] inputVector) => ActivationFunction.Activate(outputVector, inputVector, _activationFunctionType);
-        
     }
 }

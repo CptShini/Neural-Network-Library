@@ -60,25 +60,12 @@
             }
         }
 
-        internal static float[] Flatten(float[][,] input)
+        internal static float Remap(float value, float originLow, float originHigh, float destinationLow, float destinationHigh)
         {
-            int inputSize = input[0].GetLength(0);
-            int outputLength = input.Length * inputSize * inputSize;
-            float[] output = new float[outputLength];
+            float originRange = originHigh - originLow;
+            float destinationRange = destinationHigh - destinationLow;
 
-            int n = 0;
-            for (int i = 0; i < input.Length; i++)
-            {
-                for (int x = 0; x < inputSize; x++)
-                {
-                    for (int y = 0; y < inputSize; y++)
-                    {
-                        output[n++] = input[i][x, y];
-                    }
-                }
-            }
-
-            return output;
+            return (value - originLow) / originRange * destinationRange + destinationLow;
         }
     }
 }

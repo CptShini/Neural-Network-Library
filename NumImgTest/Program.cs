@@ -12,7 +12,8 @@ namespace NumImgTest
     {
         private static void Main(string[] args)
         {
-            TestConvolutional();
+            TestBackpropagation();
+            //TestConvolutional();
         }
 
         static void TestConvolutional()
@@ -24,9 +25,6 @@ namespace NumImgTest
             {
                 input[i / 28, i % 28] = dataset[i];
             }
-
-            SaveFloatMatrixAsBitmap(input, "Input");
-
 
             CNNStructure CNNStructure = new CNNStructure();
             CNNStructure.AddLayer(2, 5, ActivationFunctionType.ReLU);
@@ -87,6 +85,7 @@ namespace NumImgTest
         static void SaveFloatArrayAsBitmap(float[] pixels)
         {
             Bitmap bmp = new Bitmap(28, 28);
+            
             for (int i = 0; i < pixels.Length; i++)
             {
                 int val = (int)(pixels[i] * 255f);
@@ -94,7 +93,7 @@ namespace NumImgTest
                 int x = i % 28;
                 int y = i / 28;
                 Color color = Color.FromArgb(val, val, val);
-
+                
                 bmp.SetPixel(x, y, color);
             }
             bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{DateTime.Now.Ticks}.png");

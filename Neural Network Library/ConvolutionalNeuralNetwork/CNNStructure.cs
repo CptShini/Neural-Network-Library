@@ -22,15 +22,15 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             return layers.ToArray();
         }
 
-        internal int GetFCLayerInputSize(int inputSize)
+        internal int GetFCLInputSize(int inputSize)
         {
             int finalCNNLayerOutputSize = inputSize;
             foreach (CNNLayerData layer in _layerData)
             {
-                finalCNNLayerOutputSize = (inputSize - (layer._kernelSize - 1)) / 2;
+                finalCNNLayerOutputSize = (finalCNNLayerOutputSize - (layer._kernelSize - 1)) / 2;
             }
 
-            int outputSize = finalCNNLayerOutputSize * _layerData[^1]._nKernels;
+            int outputSize = finalCNNLayerOutputSize * finalCNNLayerOutputSize * _layerData[^1]._nKernels;
             return outputSize;
         }
     }

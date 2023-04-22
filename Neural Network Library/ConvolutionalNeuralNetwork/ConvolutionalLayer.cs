@@ -23,13 +23,12 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             _poolSize = 2;
 
             _kernels = new Kernel[layerData._nKernels];
-
             InitializeKernels();
         }
 
         private void InitializeKernels()
         {
-            for (int i = 0; i < _nKernels; i++)
+            for (int i = 0; i < _kernels.Length; i++)
             {
                 _kernels[i] = new Kernel(_kernelDepth, _kernelSize, _activationFunctionType);
             }
