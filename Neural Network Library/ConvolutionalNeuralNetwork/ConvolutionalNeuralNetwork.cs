@@ -31,25 +31,30 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             return FCLOutput;
         }
 
-        private static float[] Flatten(Tensor input)
+        public float[] FeedForwardTest(float[,] input)
         {
-            int inputSize = input.Size;
-            int outputLength = input.Volume;
-            float[] output = new float[outputLength];
+            long t = DateTime.Now.Ticks;
 
-            int n = 0;
-            for (int i = 0; i < input.Depth; i++)
+            Core.Debugging.ImageDrawer imageDrawer = new Core.Debugging.ImageDrawer(10, @"C:\Users\gabri\Desktop\Code Shit\TestFolder\");
+
+            Tensor output = new Tensor(input);
+            imageDrawer.SaveFloatMatrixAsBitmap($"{t} Input", input);
+
+            for (int i = 0; i < _layers.Length; i++)
             {
-                for (int x = 0; x < inputSize; x++)
+                ConvolutionalLayer layer = _layers[i];
+                output = layer.FeedForward(output);
+
+                for (int d = 0; d < output.Depth; d++)
                 {
-                    for (int y = 0; y < inputSize; y++)
-                    {
-                        output[n++] = input[i, x, y];
-                    }
+                    imageDrawer.SaveFloatMatrixAsBitmap($"{t} Layer {i} - Kernel {d} output", output[d]);
                 }
             }
 
-            return output;
+            float[] FCLInput = output.Flatten();
+            float[] FCLOutput = _fullyConnectedLayer.FeedForward(FCLInput);
+
+            return FCLOutput;
         }
     }
 }
