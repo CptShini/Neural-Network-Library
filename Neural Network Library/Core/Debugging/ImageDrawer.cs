@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using static Neural_Network_Library.Core.NeuralNetworkMath;
+﻿using Neural_Network_Library.Core.Math;
+using System.Drawing;
 
 namespace Neural_Network_Library.Core.Debugging
 {
@@ -34,7 +34,7 @@ namespace Neural_Network_Library.Core.Debugging
 
         private static Color GetValueColor(float val)
         {
-            int intensity = (int)Remap(val, 0, 1, 0, 255);
+            int intensity = (int)val.Remap(0, 1, 0, 255);
             intensity = (int)MathF.Min(intensity, 255);
 
             return val switch

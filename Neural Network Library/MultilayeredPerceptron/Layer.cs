@@ -1,5 +1,5 @@
 ﻿using Neural_Network_Library.Core;
-using static Neural_Network_Library.Core.NeuralNetworkMath;
+using Neural_Network_Library.Core.Math;
 using Random = Neural_Network_Library.Core.Random;
 
 namespace Neural_Network_Library.MultilayeredPerceptron
@@ -43,13 +43,11 @@ namespace Neural_Network_Library.MultilayeredPerceptron
         {
             _a_1 = input;
             
-            MatrixVectorProduct(_z, _w, _a_1);
-            AddVectors(_z, _z, _b);
-            Activate(_a, _z);
+            _z.MatrixVectorProduct(_w, _a_1);
+            _z.AddVector(_b);
+            _a.Activate(_z, _activationFunctionType);
             
             return _a;
         }
-
-        private void Activate(float[] outputVector, float[] inputVector) => ActivationFunction.Activate(outputVector, inputVector, _activationFunctionType);
     }
 }

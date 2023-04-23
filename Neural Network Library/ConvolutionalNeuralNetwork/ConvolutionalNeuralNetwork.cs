@@ -1,4 +1,5 @@
 ﻿using Neural_Network_Library.Core;
+using Neural_Network_Library.Core.Math;
 
 namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 {
@@ -18,32 +19,32 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 
         public float[] FeedForward(float[,] input)
         {
-            float[][,] output = new float[][,] { input };
+            Tensor output = new Tensor(input);
             foreach (ConvolutionalLayer layer in _layers)
             {
                 output = layer.FeedForward(output);
             }
 
-            float[] FCLInput = Flatten(output);
+            float[] FCLInput = output.Flatten();
             float[] FCLOutput = _fullyConnectedLayer.FeedForward(FCLInput);
 
             return FCLOutput;
         }
 
-        private static float[] Flatten(float[][,] input)
+        private static float[] Flatten(Tensor input)
         {
-            int inputSize = input[0].GetLength(0);
-            int outputLength = input.Length * inputSize * inputSize;
+            int inputSize = input.Size;
+            int outputLength = input.Volume;
             float[] output = new float[outputLength];
 
             int n = 0;
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Depth; i++)
             {
                 for (int x = 0; x < inputSize; x++)
                 {
                     for (int y = 0; y < inputSize; y++)
                     {
-                        output[n++] = input[i][x, y];
+                        output[n++] = input[i, x, y];
                     }
                 }
             }

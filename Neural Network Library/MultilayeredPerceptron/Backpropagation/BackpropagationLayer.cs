@@ -71,6 +71,6 @@ namespace Neural_Network_Library.MultilayeredPerceptron.Backpropagation
             return sum;
         }
 
-        private float DerivedActivate(float val) => ActivationFunction.Activate(val, _layer._activationFunctionType, true);
+        private float DerivedActivate(float val) => val.Activate(_layer._activationFunctionType, true);
     }
 }
