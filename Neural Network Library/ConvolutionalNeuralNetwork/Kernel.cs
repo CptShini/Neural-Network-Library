@@ -8,7 +8,6 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
     {
         private readonly int _depth;
         private readonly int _kernelSize;
-        private readonly int _kernelSizeDelta;
         private readonly ActivationFunctionType _activationFunctionType;
 
         private readonly float[][,] _filter;
@@ -20,7 +19,6 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
         {
             _depth = depth;
             _kernelSize = kernelSize;
-            _kernelSizeDelta = (int)((kernelSize - 1) / 2f);
             _activationFunctionType = activationFunctionType;
 
             _filter = new float[depth][,];
@@ -51,7 +49,7 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             _input = input;
             int inputSize = input[0].GetLength(0);
 
-            int convolutionSize = inputSize - 2 * _kernelSizeDelta;
+            int convolutionSize = inputSize - (_kernelSize - 1);
             float[,] convolution = new float[convolutionSize, convolutionSize];
 
             for (int x = 0; x < convolutionSize; x++)
@@ -67,40 +65,22 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 
         private float ApplyFilters(int x, int y)
         {
-            int inputX = x + _kernelSizeDelta;
-            int inputY = y + _kernelSizeDelta;
-
             float convolutionSum = 0f;
-            for (int i = 0; i < _depth; i++)
+            for (int d = 0; d < _depth; d++)
             {
-                convolutionSum += ConvolveAtDepth(i, inputX, inputY);
+                for (int i = 0; i < _kernelSize; i++)
+                {
+                    for (int j = 0; j < _kernelSize; j++)
+                    {
+                        convolutionSum += _input[d][x + i, y + j] * _filter[d][i, j];
+                    }
+                }
             }
 
             float z = convolutionSum + _bias;
             float a = Activate(z, _activationFunctionType);
 
             return a;
-        }
-
-        private float ConvolveAtDepth(int depthIndex, int inputX, int inputY)
-        {
-            float convolutionSum = 0f;
-
-            for (int i = 0; i < _kernelSize; i++)
-            {
-                for (int j = 0; j < _kernelSize; j++)
-                {
-                    int offsetX = i - _kernelSizeDelta;
-                    int offsetY = j - _kernelSizeDelta;
-
-                    int offsetInputX = inputX + offsetX;
-                    int offsetInputY = inputY + offsetY;
-
-                    convolutionSum += _input[depthIndex][offsetInputX, offsetInputY] * _filter[depthIndex][i, j];
-                }
-            }
-
-            return convolutionSum;
         }
     }
 }
