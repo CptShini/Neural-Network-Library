@@ -3,6 +3,7 @@ using Neural_Network_Library.ConvolutionalNeuralNetwork;
 using Neural_Network_Library.Core;
 using Neural_Network_Library.MultilayeredPerceptron;
 using Neural_Network_Library.MultilayeredPerceptron.Backpropagation;
+using System.Data;
 using System.Drawing;
 using Random = Neural_Network_Library.Core.Random;
 
@@ -12,28 +13,36 @@ namespace NumImgTest
     {
         private static void Main(string[] args)
         {
-            TestBackpropagation();
-            //TestConvolutional();
+            //TestBackpropagation();
+            TestConvolutional();
         }
 
         static void TestConvolutional()
         {
-            float[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv")[Random.Range(100)].InputData;
+            CNNStructure structure = new CNNStructure();
+            structure.AddLayer(2, 5, ActivationFunctionType.ReLU);
+            structure.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
 
-            float[,] input = new float[28, 28];
-            for (int i = 0; i < dataset.Length; i++)
+            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, structure);
+
+            Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
+            for (int i = 0; i < 10; i++)
             {
-                input[i / 28, i % 28] = dataset[i];
+                float[,] input = ParseInputData(dataset[i].InputData);
+                ClassifierGuess output = Classifier.Classify(input, CNN);
+                Console.WriteLine($"{output.GuessIndex} | {output.GuessConfidence * 100:00.00}%");
+            }
+        }
+
+        static float[,] ParseInputData(float[] inputData)
+        {
+            float[,] input = new float[28, 28];
+            for (int i = 0; i < inputData.Length; i++)
+            {
+                input[i / 28, i % 28] = inputData[i];
             }
 
-            CNNStructure CNNStructure = new CNNStructure();
-            CNNStructure.AddLayer(2, 5, ActivationFunctionType.ReLU);
-            CNNStructure.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
-
-            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, CNNStructure);
-
-            ClassifierGuess output = Classifier.Classify(input, CNN);
-            Console.WriteLine($"{output.GuessIndex} | {output.GuessConfidence * 100:00.00}%");
+            return input;
         }
 
         static void TestBackpropagation()
@@ -80,49 +89,6 @@ namespace NumImgTest
             }
 
             return dataset;
-        }
-        
-        static void SaveFloatArrayAsBitmap(float[] pixels)
-        {
-            Bitmap bmp = new Bitmap(28, 28);
-            
-            for (int i = 0; i < pixels.Length; i++)
-            {
-                int val = (int)(pixels[i] * 255f);
-
-                int x = i % 28;
-                int y = i / 28;
-                Color color = Color.FromArgb(val, val, val);
-                
-                bmp.SetPixel(x, y, color);
-            }
-            bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{DateTime.Now.Ticks}.png");
-        }
-
-        static void SaveFloatMatrixAsBitmap(float[,] pixels, string name)
-        {
-            int scaler = 10;
-
-            Bitmap bmp = new Bitmap(28 * scaler, 28 * scaler);
-            for (int i = 0; i < pixels.GetLongLength(0); i++)
-            {
-                for (int j = 0; j < pixels.GetLongLength(1); j++)
-                {
-                    float val = pixels[j, i];
-                    int intensity = (int)(val * 255);
-                    intensity = (int)MathF.Min(intensity, 255);
-
-                    Color color = (val <= 255) ? Color.FromArgb(intensity, intensity, intensity) : Color.FromArgb(255, 0, 0);
-                    for (int iS = 0; iS < scaler; iS++)
-                    {
-                        for (int jS = 0; jS < scaler; jS++)
-                        {
-                            bmp.SetPixel(i * scaler + iS, j * scaler + jS, color);
-                        }
-                    }
-                }
-            }
-            bmp.Save($@"C:\Users\gabri\Desktop\Code Shit\TestFolder\{name}.png");
         }
     }
 }

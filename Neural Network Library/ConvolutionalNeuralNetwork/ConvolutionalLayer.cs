@@ -16,13 +16,13 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
         internal ConvolutionalLayer(int kernelDepth, CNNLayerData layerData)
         {
             _kernelDepth = kernelDepth;
-            _nKernels = layerData._nKernels;
-            _kernelSize = layerData._kernelSize;
-            _activationFunctionType = layerData._activationFunctionType;
+            _nKernels = layerData.nKernels;
+            _kernelSize = layerData.kernelSize;
+            _activationFunctionType = layerData.activationFunctionType;
 
             _poolSize = 2;
 
-            _kernels = new Kernel[layerData._nKernels];
+            _kernels = new Kernel[layerData.nKernels];
             InitializeKernels();
         }
 

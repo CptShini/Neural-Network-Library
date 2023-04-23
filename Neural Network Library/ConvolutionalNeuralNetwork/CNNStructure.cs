@@ -16,7 +16,7 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 
             for (int i = 1; i < _layerData.Count; i++)
             {
-                layers.Add(new ConvolutionalLayer(_layerData[i - 1]._nKernels, _layerData[i]));
+                layers.Add(new ConvolutionalLayer(_layerData[i - 1].nKernels, _layerData[i]));
             }
 
             return layers.ToArray();
@@ -27,11 +27,13 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             int finalCNNLayerOutputSize = inputSize;
             foreach (CNNLayerData layer in _layerData)
             {
-                finalCNNLayerOutputSize = (finalCNNLayerOutputSize - (layer._kernelSize - 1)) / 2;
+                finalCNNLayerOutputSize = (finalCNNLayerOutputSize - (layer.kernelSize - 1)) / 2;
             }
 
-            int outputSize = finalCNNLayerOutputSize * finalCNNLayerOutputSize * _layerData[^1]._nKernels;
+            int outputSize = finalCNNLayerOutputSize * finalCNNLayerOutputSize * _layerData[^1].nKernels;
             return outputSize;
         }
     }
+
+    internal record struct CNNLayerData(int nKernels, int kernelSize, ActivationFunctionType activationFunctionType);
 }
