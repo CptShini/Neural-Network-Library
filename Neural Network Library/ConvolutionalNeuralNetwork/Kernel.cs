@@ -11,12 +11,12 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 
         private readonly ActivationFunctionType _activationFunctionType;
 
-        internal Kernel(int depth, int kernelSize, ActivationFunctionType activationFunctionType)
+        internal Kernel(int kernelDepth, int kernelSize, ActivationFunctionType activationFunctionType)
         {
             _activationFunctionType = activationFunctionType;
 
-            _filter = new Tensor(depth, kernelSize);
-            InitializeFiltersAndBias();
+            _filter = new Tensor(kernelDepth, kernelSize);
+            InitializeFiltersAndBiasTest();
         }
 
         private void InitializeFiltersAndBias()
@@ -30,6 +30,27 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
                         _filter[d, x, y] = Random.Range(-1f, 1f);
                     }
                 }
+            }
+
+            _bias = Random.Range(-1f, 1f);
+        }
+
+        private void InitializeFiltersAndBiasTest()
+        {
+            long t = DateTime.Now.Ticks;
+
+            Core.Debugging.ImageDrawer imageDrawer = new Core.Debugging.ImageDrawer(10, @"C:\Users\gabri\Desktop\Code Shit\TestFolder\");
+
+            for (int d = 0; d < _filter.Depth; d++)
+            {
+                for (int x = 0; x < _filter.Size; x++)
+                {
+                    for (int y = 0; y < _filter.Size; y++)
+                    {
+                        _filter[d, x, y] = Random.Range(-1f, 1f);
+                    }
+                }
+                imageDrawer.SaveFloatMatrixAsBitmap($"{t} Filter {d}", _filter[d], true);
             }
 
             _bias = Random.Range(-1f, 1f);

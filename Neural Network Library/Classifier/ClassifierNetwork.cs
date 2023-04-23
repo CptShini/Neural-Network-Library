@@ -14,7 +14,7 @@ namespace Neural_Network_Library.Classifier
 
         public static ClassifierGuess Classify(this float[,] input, ConvolutionalNeuralNetwork.ConvolutionalNeuralNetwork neuralNetwork)
         {
-            float[] output = neuralNetwork.FeedForward(input);
+            float[] output = neuralNetwork.FeedForwardTest(input);
             output.NormalizeVector(output);
 
             return new ClassifierGuess(output);

@@ -25,11 +25,11 @@ namespace Neural_Network_Library.Core.Math
             {
                 for (int y = 0; y < convolutionSize; y++)
                 {
-                    for (int i = 0; i < filter.Size; i++)
+                    for (int d = 0; d < input.Depth; d++)
                     {
-                        for (int j = 0; j < filter.Size; j++)
+                        for (int i = 0; i < filter.Size; i++)
                         {
-                            for (int d = 0; d < input.Depth; d++)
+                            for (int j = 0; j < filter.Size; j++)
                             {
                                 convolution[x, y] += input[d, x + i, y + j] * filter[d, i, j];
                             }
