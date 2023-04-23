@@ -3,8 +3,6 @@ using Neural_Network_Library.ConvolutionalNeuralNetwork;
 using Neural_Network_Library.Core;
 using Neural_Network_Library.MultilayeredPerceptron;
 using Neural_Network_Library.MultilayeredPerceptron.Backpropagation;
-using System.Data;
-using System.Drawing;
 using Random = Neural_Network_Library.Core.Random;
 
 namespace NumImgTest
@@ -28,8 +26,8 @@ namespace NumImgTest
             Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
             for (int i = 0; i < 4; i++)
             {
-                float[,] input = ParseInputData(dataset[i].InputData);
-                ClassifierGuess output = Classifier.Classify(input, CNN);
+                float[,] input = ParseInputData(dataset[Random.Range(10000)].InputData);
+                ClassifierGuess output = input.Classify(CNN);
                 Console.WriteLine($"{output.GuessIndex} | {output.GuessConfidence * 100:00.00}%");
             }
         }
@@ -59,7 +57,7 @@ namespace NumImgTest
 
             foreach (Datapoint datapoint in testset)
             {
-                ClassifierGuess guess = Classifier.Classify(datapoint.InputData, neuralNetwork);
+                ClassifierGuess guess = datapoint.InputData.Classify(neuralNetwork);
 
                 int answer = datapoint.DesiredOutput.ToList().IndexOf(datapoint.DesiredOutput.Max());
                 Console.WriteLine($"{answer} | {guess.GuessIndex} | {guess.GuessConfidence * 100:00}%");

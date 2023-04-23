@@ -4,7 +4,7 @@ namespace Neural_Network_Library.Core
 {
     internal static class ActivationFunction
     {
-        private static float Activate(float val, ActivationFunctionType type)
+        private static float Activate(this float val, ActivationFunctionType type)
         {
             return type switch
             {
@@ -17,7 +17,7 @@ namespace Neural_Network_Library.Core
             };
         }
 
-        private static float DerivedActivate(float val, ActivationFunctionType type)
+        private static float DerivedActivate(this float val, ActivationFunctionType type)
         {
             return type switch
             {
@@ -30,10 +30,10 @@ namespace Neural_Network_Library.Core
             };
         }
 
-        internal static float Activate(float val, ActivationFunctionType type, bool useDerivedActivation = false) =>
-            !useDerivedActivation ? Activate(val, type) : DerivedActivate(val, type);
+        internal static float Activate(this float val, ActivationFunctionType type, bool useDerivedActivation = false) =>
+            !useDerivedActivation ? val.Activate(type) : val.DerivedActivate(type);
 
-        internal static void Activate(float[] outputVector, float[] inputVector, ActivationFunctionType type, bool useDerivedActivation = false)
+        internal static void Activate(this float[] outputVector, float[] inputVector, ActivationFunctionType type, bool useDerivedActivation = false)
         {
             for (int i = 0; i < outputVector.Length; i++)
             {
@@ -41,7 +41,9 @@ namespace Neural_Network_Library.Core
             }
         }
 
-        internal static void Activate(float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type, bool useDerivedActivation = false)
+        internal static void Activate(this float[] inputVector, ActivationFunctionType type, bool useDerivedActivation = false) => inputVector.Activate(inputVector, type, useDerivedActivation);
+
+        internal static void Activate(this float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type, bool useDerivedActivation = false)
         {
             for (int i = 0; i < outputMatrix.GetLength(0); i++)
             {
@@ -51,6 +53,8 @@ namespace Neural_Network_Library.Core
                 }
             }
         }
+
+        internal static void Activate(this float[,] inputMatrix, ActivationFunctionType type, bool useDerivedActivation = false) => inputMatrix.Activate(inputMatrix, type, useDerivedActivation);
     }
 
     public enum ActivationFunctionType { Step, Linear, Sigmoid, Tanh, ReLU };

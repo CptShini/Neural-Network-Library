@@ -5,7 +5,6 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
     internal class ConvolutionalLayer
     {
         private readonly int _kernelDepth;
-        private readonly int _nKernels;
         private readonly int _kernelSize;
         private readonly ActivationFunctionType _activationFunctionType;
 
@@ -16,7 +15,6 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
         internal ConvolutionalLayer(int kernelDepth, CNNLayerData layerData)
         {
             _kernelDepth = kernelDepth;
-            _nKernels = layerData.nKernels;
             _kernelSize = layerData.kernelSize;
             _activationFunctionType = layerData.activationFunctionType;
 
@@ -34,59 +32,16 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             }
         }
 
-        internal float[][,] FeedForward(float[][,] input)
+        internal Tensor FeedForward(Tensor input)
         {
-            float[][,] outputs = new float[_nKernels][,];
+            Tensor output = new Tensor(_kernels.Length);
 
-            for (int i = 0; i < _nKernels; i++)
+            for (int d = 0; d < output.Depth; d++)
             {
-                outputs[i] = _kernels[i].Convolve(input);
-                outputs[i] = MaxPool(outputs[i]);
+                output[d] = _kernels[d].Convolve(input).MaxPool(_poolSize);
             }
 
-            return outputs;
-        }
-
-        private float[,] MaxPool(float[,] input)
-        {
-            int inputSize = input.GetLength(0);
-
-            int maxPoolSize = inputSize / _poolSize;
-            float[,] maxPool = new float[maxPoolSize, maxPoolSize];
-
-            for (int x = 0; x < maxPoolSize; x++)
-            {
-                for (int y = 0; y < maxPoolSize; y++)
-                {
-                    maxPool[x, y] = MaxPoolAt(input, x, y);
-                }
-            }
-
-            return maxPool;
-        }
-
-        private float MaxPoolAt(float[,] input, int x, int y)
-        {
-            int inputX = x * _poolSize;
-            int inputY = y * _poolSize;
-
-            float currentMax = 0f;
-            for (int i = 0; i < _poolSize; i++)
-            {
-                for (int j = 0; j < _poolSize; j++)
-                {
-                    int offsetX = i;
-                    int offsetY = j;
-
-                    int offsetInputX = inputX + offsetX;
-                    int offsetInputY = inputY + offsetY;
-
-                    float val = input[offsetInputX, offsetInputY];
-                    if (val > currentMax) currentMax = val;
-                }
-            }
-
-            return currentMax;
+            return output;
         }
     }
 }
