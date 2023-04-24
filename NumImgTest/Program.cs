@@ -28,7 +28,11 @@ namespace NumImgTest
             {
                 float[,] input = ParseInputData(dataset[Random.Range(10000)].InputData);
                 ClassifierGuess output = input.Classify(CNN);
-                Console.WriteLine($"{output.GuessIndex} | {output.GuessConfidence * 100:00.00}%");
+                for (int j = 0; j < output.Count; j++)
+                {
+                    Console.WriteLine($"{output[j].Key} | {output[j].Value * 100:00.00}%");
+                }
+                Console.WriteLine();
             }
         }
 
@@ -57,10 +61,14 @@ namespace NumImgTest
 
             foreach (Datapoint datapoint in testset)
             {
-                ClassifierGuess guess = datapoint.InputData.Classify(neuralNetwork);
+                ClassifierGuess output = datapoint.InputData.Classify(neuralNetwork);
 
                 int answer = datapoint.DesiredOutput.ToList().IndexOf(datapoint.DesiredOutput.Max());
-                Console.WriteLine($"{answer} | {guess.GuessIndex} | {guess.GuessConfidence * 100:00}%");
+                for (int j = 0; j < output.Count; j++)
+                {
+                    Console.WriteLine($"{answer} | {output[j].Key} | {output[j].Value * 100:00.00}%");
+                }
+                Console.WriteLine();
             }
         }
 
