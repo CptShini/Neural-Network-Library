@@ -1,5 +1,5 @@
 ﻿using Neural_Network_Library.Core;
-using Neural_Network_Library.Core.Math;
+using Math = Neural_Network_Library.Core.Math;
 using Random = Neural_Network_Library.Core.Random;
 
 namespace Neural_Network_Library.ConvolutionalNeuralNetwork
@@ -56,12 +56,37 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             _bias = Random.Range(-1f, 1f);
         }
 
-        internal float[,] Convolve(Tensor input)
+        internal float[,] Process(Tensor input)
         {
-            float[,] convolution = input.Convolve(_filter);
+            float[,] convolution = Convolve(input, _filter);
 
-            convolution.AddToMatrix(_bias);
-            convolution.Activate(_activationFunctionType);
+            Math.AddToMatrix(convolution, _bias);
+            ActivationFunction.Activate(convolution, _activationFunctionType);
+
+            return convolution;
+        }
+
+        private static float[,] Convolve(Tensor input, Tensor filter)
+        {
+            int convolutionSize = input.Size - (filter.Size - 1);
+            float[,] convolution = new float[convolutionSize, convolutionSize];
+
+            for (int x = 0; x < convolutionSize; x++)
+            {
+                for (int y = 0; y < convolutionSize; y++)
+                {
+                    for (int d = 0; d < input.Depth; d++)
+                    {
+                        for (int i = 0; i < filter.Size; i++)
+                        {
+                            for (int j = 0; j < filter.Size; j++)
+                            {
+                                convolution[x, y] += input[d, x + i, y + j] * filter[d, i, j];
+                            }
+                        }
+                    }
+                }
+            }
 
             return convolution;
         }

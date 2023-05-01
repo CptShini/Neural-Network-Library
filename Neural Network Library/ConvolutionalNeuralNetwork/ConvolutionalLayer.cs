@@ -1,6 +1,4 @@
-﻿using Neural_Network_Library.Core.Math;
-
-namespace Neural_Network_Library.ConvolutionalNeuralNetwork
+﻿namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 {
     internal class ConvolutionalLayer
     {
@@ -15,6 +13,49 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
             }
         }
 
-        internal Tensor FeedForward(Tensor input) => _kernels.Convolve(input);
+        internal Tensor FeedForward(Tensor input)
+        {
+            Tensor output = new Tensor(_kernels.Length);
+
+            for (int d = 0; d < output.Depth; d++)
+            {
+                output[d] = _kernels[d].Process(input);
+                output[d] = MaxPool(output[d]);
+            }
+
+            return output;
+        }
+
+        private static float[,] MaxPool(float[,] input)
+        {
+            int poolSize = 2;
+            int inputSize = input.GetLength(0);
+
+            int maxPoolSize = inputSize / poolSize;
+            float[,] maxPool = new float[maxPoolSize, maxPoolSize];
+
+            for (int x = 0; x < maxPoolSize; x++)
+            {
+                for (int y = 0; y < maxPoolSize; y++)
+                {
+                    int inputX = x * poolSize;
+                    int inputY = y * poolSize;
+
+                    for (int i = 0; i < poolSize; i++)
+                    {
+                        for (int j = 0; j < poolSize; j++)
+                        {
+                            int offsetInputX = inputX + i;
+                            int offsetInputY = inputY + j;
+
+                            float val = input[offsetInputX, offsetInputY];
+                            if (val > maxPool[x, y]) maxPool[x, y] = val;
+                        }
+                    }
+                }
+            }
+
+            return maxPool;
+        }
     }
 }

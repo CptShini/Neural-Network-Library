@@ -1,5 +1,4 @@
 ﻿using Neural_Network_Library.Core;
-using Neural_Network_Library.Core.Math;
 
 namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 {
@@ -25,10 +24,31 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
                 output = layer.FeedForward(output);
             }
 
-            float[] FCLInput = output.Flatten();
+            float[] FCLInput = Flatten(output);
             float[] FCLOutput = _fullyConnectedLayer.FeedForward(FCLInput);
 
             return FCLOutput;
+        }
+
+        private static float[] Flatten(Tensor input)
+        {
+            int inputSize = input.Size;
+            int outputLength = input.Volume;
+            float[] output = new float[outputLength];
+
+            int n = 0;
+            for (int i = 0; i < input.Depth; i++)
+            {
+                for (int x = 0; x < inputSize; x++)
+                {
+                    for (int y = 0; y < inputSize; y++)
+                    {
+                        output[n++] = input[i, x, y];
+                    }
+                }
+            }
+
+            return output;
         }
 
         public float[] FeedForwardTest(float[,] input)
@@ -51,7 +71,7 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
                 }
             }
 
-            float[] FCLInput = output.Flatten();
+            float[] FCLInput = Flatten(output);
             float[] FCLOutput = _fullyConnectedLayer.FeedForward(FCLInput);
 
             return FCLOutput;
