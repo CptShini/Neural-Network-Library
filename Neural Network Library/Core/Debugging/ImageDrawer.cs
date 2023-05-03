@@ -28,7 +28,7 @@ namespace Neural_Network_Library.Core.Debugging
             {
                 for (int j = 0; j < mSizeY; j++)
                 {
-                    float val = m[i, j];
+                    float val = m[j, i];
                     Color color = GetColor(val, minVal, maxVal, signedColors);
                     SetPixel(bmp, i, j, color);
                 }
