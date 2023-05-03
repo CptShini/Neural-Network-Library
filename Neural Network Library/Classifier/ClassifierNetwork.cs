@@ -1,4 +1,4 @@
-﻿using Neural_Network_Library.Core.Math;
+﻿using Neural_Network_Library.Core;
 
 namespace Neural_Network_Library.Classifier
 {

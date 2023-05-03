@@ -1,4 +1,5 @@
 ﻿using Neural_Network_Library.Core;
+using Math = System.Math;
 using Random = Neural_Network_Library.Core.Random;
 
 namespace Neural_Network_Library.Legacy

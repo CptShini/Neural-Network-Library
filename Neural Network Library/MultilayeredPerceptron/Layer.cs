@@ -1,5 +1,4 @@
 ﻿using Neural_Network_Library.Core;
-using Neural_Network_Library.Core.Math;
 using Random = Neural_Network_Library.Core.Random;
 
 namespace Neural_Network_Library.MultilayeredPerceptron

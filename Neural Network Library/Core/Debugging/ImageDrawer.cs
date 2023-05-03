@@ -1,4 +1,5 @@
-﻿using Neural_Network_Library.Core.Math;
+﻿using Neural_Network_Library.Core;
+using System.Linq;
 using System.Drawing;
 
 namespace Neural_Network_Library.Core.Debugging
@@ -19,12 +20,16 @@ namespace Neural_Network_Library.Core.Debugging
             int mSizeX = m.GetLength(0);
             int mSizeY = m.GetLength(1);
 
+            float maxVal = signedColors ? 1f : m.Max();
+            float minVal = signedColors ? -1f : m.Min();
+
             Bitmap bmp = new Bitmap(mSizeX * _scaler, mSizeY * _scaler);
             for (int i = 0; i < mSizeX; i++)
             {
                 for (int j = 0; j < mSizeY; j++)
                 {
-                    Color color = GetValueColor(m[j, i], signedColors);
+                    float val = m[i, j];
+                    Color color = GetColor(val, minVal, maxVal, signedColors);
                     SetPixel(bmp, i, j, color);
                 }
             }
@@ -32,31 +37,24 @@ namespace Neural_Network_Library.Core.Debugging
             bmp.Save($"{_path}{name}.png");
         }
 
-        private static Color GetValueColor(float val, bool signedColors)
+        private Color GetColor(float val, float minVal, float maxVal, bool signedColors) => signedColors ? GetSignedColor(val) : GetUnsignedColor(val, minVal, maxVal);
+
+        private Color GetUnsignedColor(float val, float minVal, float maxVal)
         {
-            if (!signedColors)
-            {
-                int intensity = (int)MathF.Min(val.Remap(0, 1, 0, 255), 255);
+            int intensity = (int)val.Remap(minVal, maxVal, 0, 255);
+            return Color.FromArgb(intensity, intensity, intensity);
+        }
 
-                return val switch
-                {
-                    float n when n is < 0 => Color.Black,
-                    float n when n is >= 0 and <= 1 => Color.FromArgb(intensity, intensity, intensity),
-                    float n when n is > 1 => Color.White,
-                    _ => Color.Green
-                };
-            }
-            else
-            {
-                int intensity = (int)MathF.Min(MathF.Abs(val).Remap(0, 1, 0, 255), 255);
+        private Color GetSignedColor(float val)
+        {
+            int intensity = (int)MathF.Abs(val).Remap(0f, 1f, 0f, 255f);
 
-                return val switch
-                {
-                    float n when n < 0 => Color.FromArgb(intensity, 0, 0),
-                    float n when n > 0 => Color.FromArgb(0, 0, intensity),
-                    _ => Color.Green
-                };
-            }
+            return val switch
+            {
+                float n when n < 0 => Color.FromArgb(intensity, 0, 0),
+                float n when n > 0 => Color.FromArgb(0, 0, intensity),
+                _ => Color.Green
+            };
         }
 
         private void SetPixel(Bitmap bmp, int x, int y, Color color)

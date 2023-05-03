@@ -24,7 +24,7 @@ namespace NumImgTest
             ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, structure);
 
             Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 1; i++)
             {
                 float[,] input = ParseInputData(dataset[Random.Range(10000)].InputData);
                 ClassifierGuess output = input.Classify(CNN);
