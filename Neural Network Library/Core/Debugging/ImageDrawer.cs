@@ -1,6 +1,4 @@
-﻿using Neural_Network_Library.Core;
-using System.Linq;
-//using System.Drawing;
+﻿using System.Drawing;
 
 namespace Neural_Network_Library.Core.Debugging
 {
@@ -15,13 +13,13 @@ namespace Neural_Network_Library.Core.Debugging
             _scaler = scaler;
         }
 
-        /*internal void SaveFloatMatrixAsBitmap(string name, float[,] m, bool signedColors = false)
+        internal void SaveFloatMatrixAsBitmap(string name, float[,] m, bool signedColors = false)
         {
             int mSizeX = m.GetLength(0);
             int mSizeY = m.GetLength(1);
 
-            float maxVal = signedColors ? 1f : m.Max();
-            float minVal = signedColors ? -1f : m.Min();
+            float maxVal = m.Max();
+            float minVal = m.Min();
 
             Bitmap bmp = new Bitmap(mSizeX * _scaler, mSizeY * _scaler);
             for (int i = 0; i < mSizeX; i++)
@@ -69,6 +67,6 @@ namespace Neural_Network_Library.Core.Debugging
                     bmp.SetPixel(pX, pY, color);
                 }
             }
-        }*/
+        }
     }
 }
