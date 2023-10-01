@@ -2,10 +2,10 @@
 
 namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
 {
-    public class ConvolutionalNeuralNetwork
+    public class ConvolutionalNeuralNetwork : IConvolutionalNeuralNetwork
     {
-        private readonly ConvolutionalLayer[] _convolutionalLayers;
-        private readonly MultilayeredPerceptron.NeuralNetwork _fullyConnectedLayer;
+        internal readonly ConvolutionalLayer[] _convolutionalLayers;
+        internal readonly MultilayeredPerceptron.NeuralNetwork _fullyConnectedLayer;
 
         public ConvolutionalNeuralNetwork(int inputSize, int outputLength, CNNStructure networkStructure)
         {
@@ -19,11 +19,11 @@ namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
         public float[] FeedForward(float[,] input)
         {
             Tensor output = new Tensor(input);
-            foreach (ConvolutionalLayer convolutionalLayer in _convolutionalLayers)
+            foreach (IConvolutionalLayer convolutionalLayer in _convolutionalLayers)
             {
                 output = convolutionalLayer.FeedForward(output);
             }
-
+            
             float[] FCLInput = Flatten(output);
             float[] FCLOutput = _fullyConnectedLayer.FeedForward(FCLInput);
 

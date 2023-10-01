@@ -3,10 +3,7 @@ using Neural_Network_Library.Networks.ConvolutionalNeuralNetwork;
 using Neural_Network_Library.Core;
 using Neural_Network_Library.Networks.MultilayeredPerceptron;
 using Neural_Network_Library.Backpropagation;
-using Newtonsoft;
-
-using Random = Neural_Network_Library.Core.Random;
-using Newtonsoft.Json;
+using static Neural_Network_Library.Core.RandomNumberGenerator;
 using Neural_Network_Library.SaveLoad;
 
 namespace NumImgTest
@@ -25,12 +22,12 @@ namespace NumImgTest
             structure.AddLayer(2, 5, ActivationFunctionType.ReLU);
             structure.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
 
-            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, structure);
-
+            IConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, structure);
+            
             Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
             for (int i = 0; i < 4; i++)
             {
-                float[,] input = ParseInputData(dataset[Random.Range(10000)].InputData);
+                float[,] input = ParseInputData(dataset[RandomRange(10000)].InputData);
                 ClassifierGuess output = input.Classify(CNN);
                 for (int j = 0; j < output.Count; j++)
                 {
@@ -53,7 +50,7 @@ namespace NumImgTest
 
         static void TestBackpropagation()
         {
-            Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
+            Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Documents\Code Shit\train.csv");
             Datapoint[] trainset = dataset[0..40000];
             Datapoint[] testset = dataset[40000..42000];
 
@@ -61,11 +58,11 @@ namespace NumImgTest
             NeuralNetwork neuralNetwork = new NeuralNetwork(layers);
             Backpropagation backpropagation = new Backpropagation(neuralNetwork, trainset, testset);
 
-            MultilayeredPerceptronSaver mlpS = new MultilayeredPerceptronSaver(neuralNetwork);
+            MultilayeredPerceptronSaveLoader mlpS = new MultilayeredPerceptronSaveLoader(neuralNetwork);
 
-            mlpS.SaveNetwork();
+            mlpS.SaveNetwork("Network before training", @"C:\Users\gabri\Documents\Code Shit\TestFolder");
             backpropagation.Run(10000, 100, 0.5f, 200);
-            mlpS.SaveNetwork();
+            mlpS.SaveNetwork("Network after training", @"C:\Users\gabri\Documents\Code Shit\TestFolder");
 
             foreach (Datapoint datapoint in testset)
             {

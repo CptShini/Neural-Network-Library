@@ -1,28 +1,27 @@
 ﻿namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
 {
-    internal class ConvolutionalLayer
+    internal class ConvolutionalLayer : IConvolutionalLayer
     {
-        private readonly int _kernelCount;
-        private readonly Kernel[] _kernels;
+        internal readonly Kernel[] _kernels;
 
         internal ConvolutionalLayer(int inputDepth, CNNLayerData layerData)
         {
-            _kernelCount = layerData.nKernels;
-
-            _kernels = new Kernel[_kernelCount];
-            for (int i = 0; i < _kernelCount; i++)
+            _kernels = new Kernel[layerData.nKernels];
+            for (int i = 0; i < _kernels.Length; i++)
             {
                 _kernels[i] = new Kernel(inputDepth, layerData.kernelSize, layerData.activationFunctionType);
             }
         }
 
-        internal Tensor FeedForward(Tensor input)
+        Tensor IConvolutionalLayer.FeedForward(Tensor input)
         {
-            Tensor output = new Tensor(_kernelCount);
+            Tensor output = new Tensor(_kernels.Length);
 
-            for (int d = 0; d < _kernelCount; d++)
+            for (int d = 0; d < _kernels.Length; d++)
             {
-                output[d] = _kernels[d].Convolve(input);
+                IKernel kernel = _kernels[d];
+
+                output[d] = kernel.Convolve(input);
                 output[d] = MaxPool(output[d]);
             }
 

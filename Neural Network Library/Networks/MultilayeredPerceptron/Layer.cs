@@ -1,9 +1,9 @@
 ﻿using Neural_Network_Library.Core;
-using Random = Neural_Network_Library.Core.Random;
+using static Neural_Network_Library.Core.RandomNumberGenerator;
 
 namespace Neural_Network_Library.Networks.MultilayeredPerceptron
 {
-    internal class Layer
+    internal class Layer : ILayer
     {
         internal readonly float[] _a, _z, _b;
         internal readonly float[,] _w;
@@ -31,14 +31,14 @@ namespace Neural_Network_Library.Networks.MultilayeredPerceptron
             {
                 for (int k = 0; k < _w.GetLength(1); k++)
                 {
-                    _w[j, k] = Random.Range(-1f, 1f);
+                    _w[j, k] = RandomRange(-1f, 1f);
                 }
 
-                _b[j] = Random.Range(-1f, 1f);
+                _b[j] = RandomRange(-1f, 1f);
             }
         }
 
-        internal float[] FeedForward(float[] input)
+        float[] ILayer.FeedForward(float[] input)
         {
             _a_1 = input;
 

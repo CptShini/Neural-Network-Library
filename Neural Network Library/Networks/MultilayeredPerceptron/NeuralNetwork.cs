@@ -2,7 +2,7 @@
 
 namespace Neural_Network_Library.Networks.MultilayeredPerceptron
 {
-    public class NeuralNetwork
+    public class NeuralNetwork : INeuralNetwork
     {
         internal readonly Layer[] _layers;
 
@@ -19,7 +19,7 @@ namespace Neural_Network_Library.Networks.MultilayeredPerceptron
 
         public float[] FeedForward(float[] input)
         {
-            foreach (Layer layer in _layers)
+            foreach (ILayer layer in _layers)
             {
                 input = layer.FeedForward(input);
             }

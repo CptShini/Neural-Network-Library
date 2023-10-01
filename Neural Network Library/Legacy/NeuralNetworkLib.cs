@@ -1,6 +1,6 @@
 ﻿using Neural_Network_Library.Core;
 using Math = System.Math;
-using Random = Neural_Network_Library.Core.Random;
+using RandomNumberGenerator = Neural_Network_Library.Core.RandomNumberGenerator;
 
 namespace Neural_Network_Library.Legacy
 {
@@ -127,7 +127,7 @@ namespace Neural_Network_Library.Legacy
                 {
                     for (int k = 0; k < weights[i][j].Length; k++)
                     {
-                        weights[i][j][k] = Random.Range(-1f, 1f);
+                        weights[i][j][k] = RandomNumberGenerator.RandomRange(-1f, 1f);
                     }
                 }
             }
@@ -306,7 +306,7 @@ namespace Neural_Network_Library.Legacy
                 {
                     for (int k = 0; k < p1.weights[i][j].Length; k++)
                     {
-                        weights[i][j][k] = Random.Range(0, 2) == 0 ? p1.weights[i][j][k] : p2.weights[i][j][k];
+                        weights[i][j][k] = RandomNumberGenerator.RandomRange(0, 2) == 0 ? p1.weights[i][j][k] : p2.weights[i][j][k];
                     }
                 }
             }
@@ -324,7 +324,7 @@ namespace Neural_Network_Library.Legacy
                 {
                     for (int k = 0; k < weights[i][j].Length; k++)
                     {
-                        if (Random.Range(0, p) == 0) { weights[i][j][k] = Mutation(weights[i][j][k]); }
+                        if (RandomNumberGenerator.RandomRange(0, p) == 0) { weights[i][j][k] = Mutation(weights[i][j][k]); }
                     }
                 }
             }
@@ -334,18 +334,18 @@ namespace Neural_Network_Library.Legacy
         {
             float result = val;
 
-            int p = Random.Range(0, 4);
+            int p = RandomNumberGenerator.RandomRange(0, 4);
 
             switch (p)
             {
                 case 0:
-                    result += Random.Range(0f, 1f);
+                    result += RandomNumberGenerator.RandomRange(0f, 1f);
                     break;
                 case 1:
-                    result -= Random.Range(0f, 1f);
+                    result -= RandomNumberGenerator.RandomRange(0f, 1f);
                     break;
                 case 2:
-                    result *= Random.Range(0.1f, 1f);
+                    result *= RandomNumberGenerator.RandomRange(0.1f, 1f);
                     break;
                 case 3:
                     result *= -1;

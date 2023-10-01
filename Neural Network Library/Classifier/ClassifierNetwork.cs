@@ -1,8 +1,11 @@
-﻿namespace Neural_Network_Library.Classifier
+﻿using Neural_Network_Library.Networks.ConvolutionalNeuralNetwork;
+using Neural_Network_Library.Networks.MultilayeredPerceptron;
+
+namespace Neural_Network_Library.Classifier
 {
     public static class Classifier
     {
-        public static ClassifierGuess Classify(this float[] input, Networks.MultilayeredPerceptron.NeuralNetwork neuralNetwork)
+        public static ClassifierGuess Classify(this float[] input, INeuralNetwork neuralNetwork)
         {
             float[] output = neuralNetwork.FeedForward(input);
             output.NormalizeVector(output);
@@ -10,7 +13,7 @@
             return new ClassifierGuess(output);
         }
 
-        public static ClassifierGuess Classify(this float[,] input, Networks.ConvolutionalNeuralNetwork.ConvolutionalNeuralNetwork neuralNetwork)
+        public static ClassifierGuess Classify(this float[,] input, IConvolutionalNeuralNetwork neuralNetwork)
         {
             float[] output = neuralNetwork.FeedForward(input);
             output.NormalizeVector(output);

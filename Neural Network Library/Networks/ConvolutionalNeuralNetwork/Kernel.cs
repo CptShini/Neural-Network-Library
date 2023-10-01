@@ -1,15 +1,15 @@
 ﻿using Neural_Network_Library.Core;
 using static Neural_Network_Library.Core.ActivationFunction;
-using Random = Neural_Network_Library.Core.Random;
+using static Neural_Network_Library.Core.RandomNumberGenerator;
 
 namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
 {
-    internal class Kernel
+    internal class Kernel : IKernel
     {
-        private Tensor _filter;
-        private float _bias;
+        internal Tensor _filter;
+        internal float _bias;
 
-        private readonly ActivationFunctionType _activationFunctionType;
+        internal readonly ActivationFunctionType _activationFunctionType;
 
         internal Kernel(int kernelDepth, int kernelSize, ActivationFunctionType activationFunctionType)
         {
@@ -27,15 +27,15 @@ namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
                 {
                     for (int y = 0; y < _filter.Size; y++)
                     {
-                        _filter[d, x, y] = Random.Range(-1f, 1f);
+                        _filter[d, x, y] = RandomRange(-1f, 1f);
                     }
                 }
             }
 
-            _bias = Random.Range(-1f, 1f);
+            _bias = RandomRange(-1f, 1f);
         }
 
-        internal float[,] Convolve(Tensor input)
+        float[,] IKernel.Convolve(Tensor input)
         {
             int convolutionSize = input.Size - (_filter.Size - 1);
             float[,] convolution = new float[convolutionSize, convolutionSize];
