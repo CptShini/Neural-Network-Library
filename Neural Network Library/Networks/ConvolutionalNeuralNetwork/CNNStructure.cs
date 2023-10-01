@@ -36,5 +36,17 @@ namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
         }
     }
 
-    internal record struct CNNLayerData(int nKernels, int kernelSize, ActivationFunctionType activationFunctionType);
+    internal struct CNNLayerData
+    {
+        internal int nKernels;
+        internal int kernelSize;
+        internal ActivationFunctionType activationFunctionType;
+
+        internal CNNLayerData(int nKernels, int kernelSize, ActivationFunctionType activationFunctionType)
+        {
+            this.nKernels = nKernels;
+            this.kernelSize = kernelSize;
+            this.activationFunctionType = activationFunctionType;
+        }
+    }
 }
