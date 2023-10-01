@@ -1,6 +1,6 @@
 ﻿using Neural_Network_Library.Core;
 
-namespace Neural_Network_Library.MultilayeredPerceptron
+namespace Neural_Network_Library.Networks.MultilayeredPerceptron
 {
     public class NeuralNetwork
     {
@@ -8,9 +8,10 @@ namespace Neural_Network_Library.MultilayeredPerceptron
 
         public NeuralNetwork(int[] networkStructure, ActivationFunctionType activationFunction = ActivationFunctionType.Sigmoid)
         {
-            _layers = new Layer[networkStructure.Length - 1];
+            int layerCount = networkStructure.Length - 1;
 
-            for (int i = 0; i < _layers.Length; i++)
+            _layers = new Layer[layerCount];
+            for (int i = 0; i < layerCount; i++)
             {
                 _layers[i] = new Layer(networkStructure[i], networkStructure[i + 1], activationFunction);
             }

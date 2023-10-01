@@ -1,6 +1,6 @@
 ﻿using Neural_Network_Library.Core;
 
-namespace Neural_Network_Library.ConvolutionalNeuralNetwork
+namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
 {
     public class CNNStructure
     {
@@ -16,7 +16,8 @@ namespace Neural_Network_Library.ConvolutionalNeuralNetwork
 
             for (int i = 1; i < _layerData.Count; i++)
             {
-                layers.Add(new ConvolutionalLayer(_layerData[i - 1].nKernels, _layerData[i]));
+                ConvolutionalLayer convolutionalLayer = new ConvolutionalLayer(_layerData[i - 1].nKernels, _layerData[i]);
+                layers.Add(convolutionalLayer);
             }
 
             return layers.ToArray();

@@ -1,6 +1,7 @@
 ﻿using Neural_Network_Library.Core;
+using Neural_Network_Library.Networks.MultilayeredPerceptron;
 
-namespace Neural_Network_Library.MultilayeredPerceptron.Backpropagation
+namespace Neural_Network_Library.Backpropagation
 {
     internal abstract class BackpropagationLayer
     {

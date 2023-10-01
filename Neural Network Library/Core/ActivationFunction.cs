@@ -13,7 +13,7 @@ namespace Neural_Network_Library.Core
                 Sigmoid => 1f / (1f + MathF.Exp(-val)),
                 Tanh => MathF.Tanh(val),
                 ReLU => val <= 0f ? 0f : val,
-                _ => throw new NotImplementedException()
+                _ => throw new ArgumentException()
             };
         }
 
@@ -26,35 +26,12 @@ namespace Neural_Network_Library.Core
                 Sigmoid => MathF.Exp(-val) / MathF.Pow(1 + MathF.Exp(-val), 2f),
                 Tanh => 1f - MathF.Pow(MathF.Tanh(val), 2f),
                 ReLU => val > 0f ? 1f : 0f,
-                _ => throw new NotImplementedException()
+                _ => throw new ArgumentException()
             };
         }
 
         internal static float Activate(this float val, ActivationFunctionType type, bool useDerivedActivation = false) =>
             !useDerivedActivation ? val.Activate(type) : val.DerivedActivate(type);
-
-        internal static void Activate(this float[] outputVector, float[] inputVector, ActivationFunctionType type, bool useDerivedActivation = false)
-        {
-            for (int i = 0; i < outputVector.Length; i++)
-            {
-                outputVector[i] = Activate(inputVector[i], type, useDerivedActivation);
-            }
-        }
-
-        internal static void Activate(this float[] inputVector, ActivationFunctionType type, bool useDerivedActivation = false) => inputVector.Activate(inputVector, type, useDerivedActivation);
-
-        internal static void Activate(this float[,] outputMatrix, float[,] inputMatrix, ActivationFunctionType type, bool useDerivedActivation = false)
-        {
-            for (int i = 0; i < outputMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < outputMatrix.GetLength(1); j++)
-                {
-                    outputMatrix[i, j] = Activate(inputMatrix[i, j], type, useDerivedActivation);
-                }
-            }
-        }
-
-        internal static void Activate(this float[,] inputMatrix, ActivationFunctionType type, bool useDerivedActivation = false) => inputMatrix.Activate(inputMatrix, type, useDerivedActivation);
     }
 
     public enum ActivationFunctionType { Step, Linear, Sigmoid, Tanh, ReLU };

@@ -1,4 +1,4 @@
-﻿namespace Neural_Network_Library.MultilayeredPerceptron.Backpropagation
+﻿namespace Neural_Network_Library.Backpropagation
 {
     public struct Datapoint
     {

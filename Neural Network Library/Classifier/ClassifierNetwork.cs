@@ -1,10 +1,8 @@
-﻿using Neural_Network_Library.Core;
-
-namespace Neural_Network_Library.Classifier
+﻿namespace Neural_Network_Library.Classifier
 {
     public static class Classifier
     {
-        public static ClassifierGuess Classify(this float[] input, MultilayeredPerceptron.NeuralNetwork neuralNetwork)
+        public static ClassifierGuess Classify(this float[] input, Networks.MultilayeredPerceptron.NeuralNetwork neuralNetwork)
         {
             float[] output = neuralNetwork.FeedForward(input);
             output.NormalizeVector(output);
@@ -12,12 +10,21 @@ namespace Neural_Network_Library.Classifier
             return new ClassifierGuess(output);
         }
 
-        public static ClassifierGuess Classify(this float[,] input, ConvolutionalNeuralNetwork.ConvolutionalNeuralNetwork neuralNetwork)
+        public static ClassifierGuess Classify(this float[,] input, Networks.ConvolutionalNeuralNetwork.ConvolutionalNeuralNetwork neuralNetwork)
         {
-            float[] output = neuralNetwork.FeedForwardTest(input);
+            float[] output = neuralNetwork.FeedForward(input);
             output.NormalizeVector(output);
 
             return new ClassifierGuess(output);
+        }
+
+        private static void NormalizeVector(this float[] outputVector, float[] inputVector)
+        {
+            float inputSum = inputVector.Sum();
+            for (int i = 0; i < inputVector.Length; i++)
+            {
+                outputVector[i] = inputVector[i] / inputSum;
+            }
         }
     }
 }

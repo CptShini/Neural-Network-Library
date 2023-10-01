@@ -1,4 +1,4 @@
-﻿namespace Neural_Network_Library.ConvolutionalNeuralNetwork
+﻿namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
 {
     internal struct Tensor
     {

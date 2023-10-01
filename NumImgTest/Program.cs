@@ -1,9 +1,13 @@
 ﻿using Neural_Network_Library.Classifier;
-using Neural_Network_Library.ConvolutionalNeuralNetwork;
+using Neural_Network_Library.Networks.ConvolutionalNeuralNetwork;
 using Neural_Network_Library.Core;
-using Neural_Network_Library.MultilayeredPerceptron;
-using Neural_Network_Library.MultilayeredPerceptron.Backpropagation;
+using Neural_Network_Library.Networks.MultilayeredPerceptron;
+using Neural_Network_Library.Backpropagation;
+using Newtonsoft;
+
 using Random = Neural_Network_Library.Core.Random;
+using Newtonsoft.Json;
+using Neural_Network_Library.SaveLoad;
 
 namespace NumImgTest
 {
@@ -11,8 +15,8 @@ namespace NumImgTest
     {
         private static void Main(string[] args)
         {
-            //TestBackpropagation();
-            TestConvolutional();
+            TestBackpropagation();
+            //TestConvolutional();
         }
 
         static void TestConvolutional()
@@ -24,7 +28,7 @@ namespace NumImgTest
             ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, structure);
 
             Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 4; i++)
             {
                 float[,] input = ParseInputData(dataset[Random.Range(10000)].InputData);
                 ClassifierGuess output = input.Classify(CNN);
@@ -57,7 +61,11 @@ namespace NumImgTest
             NeuralNetwork neuralNetwork = new NeuralNetwork(layers);
             Backpropagation backpropagation = new Backpropagation(neuralNetwork, trainset, testset);
 
+            MultilayeredPerceptronSaver mlpS = new MultilayeredPerceptronSaver(neuralNetwork);
+
+            mlpS.SaveNetwork();
             backpropagation.Run(10000, 100, 0.5f, 200);
+            mlpS.SaveNetwork();
 
             foreach (Datapoint datapoint in testset)
             {

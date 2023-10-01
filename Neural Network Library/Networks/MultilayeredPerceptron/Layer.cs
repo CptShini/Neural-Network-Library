@@ -1,7 +1,7 @@
 ﻿using Neural_Network_Library.Core;
 using Random = Neural_Network_Library.Core.Random;
 
-namespace Neural_Network_Library.MultilayeredPerceptron
+namespace Neural_Network_Library.Networks.MultilayeredPerceptron
 {
     internal class Layer
     {
@@ -41,10 +41,19 @@ namespace Neural_Network_Library.MultilayeredPerceptron
         internal float[] FeedForward(float[] input)
         {
             _a_1 = input;
-            
-            _z.MatrixVectorProduct(_w, _a_1);
-            _z.AddVector(_b);
-            _a.Activate(_z, _activationFunctionType);
+
+            for (int j = 0; j < _w.GetLength(0); j++)
+            {
+                _z[j] = _b[j];
+
+                for (int k = 0; k < _w.GetLength(1); k++)
+                {
+                    _z[j] += _w[j, k] * _a_1[k];
+                }
+
+                _a[j] = ActivationFunction.Activate(_z[j], _activationFunctionType);
+
+            }
             
             return _a;
         }
