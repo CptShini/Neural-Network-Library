@@ -1,4 +1,4 @@
-﻿using Neural_Network_Library.Networks.MultilayeredPerceptron;
+﻿using Neural_Network_Library.Networks.MLP;
 
 namespace Neural_Network_Library.Backpropagation
 {
@@ -6,7 +6,7 @@ namespace Neural_Network_Library.Backpropagation
     {
         private float[] _y;
 
-        internal BackpropagationOutputLayer(Layer layer) : base(layer) => _y = Array.Empty<float>();
+        internal BackpropagationOutputLayer(MLPLayer layer) : base(layer) => _y = Array.Empty<float>();
 
         internal void SetDesiredOutput(float[] desiredOutput) => _y = desiredOutput;
 

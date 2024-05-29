@@ -1,15 +1,15 @@
 ﻿using Neural_Network_Library.Core;
-using Neural_Network_Library.Networks.MultilayeredPerceptron;
+using Neural_Network_Library.Networks.MLP;
 using System.Text;
 
 namespace Neural_Network_Library.SaveLoad
 {
-    public class MultilayeredPerceptronSaveLoader : NetworkSaveLoader<NeuralNetwork>
+    public class MultilayeredPerceptronSaveLoader : NetworkSaveLoader<MultilayeredPerceptron>
     {
-        private readonly NeuralNetwork _network;
+        private readonly MultilayeredPerceptron _network;
         private readonly StringBuilder sb = new();
 
-        public MultilayeredPerceptronSaveLoader(NeuralNetwork network) => _network = network;
+        public MultilayeredPerceptronSaveLoader(MultilayeredPerceptron network) => _network = network;
 
         private protected override string EncodeNetwork()
         {
@@ -23,7 +23,7 @@ namespace Neural_Network_Library.SaveLoad
             return sb.ToString();
         }
 
-        private void AddLayerString(Layer layer, int index)
+        private void AddLayerString(MLPLayer layer, int index)
         {
             sb.AppendLine($"Layer {index}");
             sb.Append('[');

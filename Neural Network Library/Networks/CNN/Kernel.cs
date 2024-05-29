@@ -1,8 +1,9 @@
 ﻿using Neural_Network_Library.Core;
+using Neural_Network_Library.Interfaces.CNN;
 using static Neural_Network_Library.Core.ActivationFunction;
 using static Neural_Network_Library.Core.RandomNumberGenerator;
 
-namespace Neural_Network_Library.Networks.ConvolutionalNeuralNetwork
+namespace Neural_Network_Library.Networks.CNN
 {
     internal class Kernel : IKernel
     {

@@ -1,10 +1,11 @@
 ﻿using Neural_Network_Library.Classifier;
-using Neural_Network_Library.Networks.ConvolutionalNeuralNetwork;
+using Neural_Network_Library.Networks.CNN;
 using Neural_Network_Library.Core;
-using Neural_Network_Library.Networks.MultilayeredPerceptron;
+using Neural_Network_Library.Networks.MLP;
 using Neural_Network_Library.Backpropagation;
 using static Neural_Network_Library.Core.RandomNumberGenerator;
 using Neural_Network_Library.SaveLoad;
+using System.IO;
 
 namespace NumImgTest
 {
@@ -18,13 +19,13 @@ namespace NumImgTest
 
         static void TestConvolutional()
         {
-            CNNStructure structure = new CNNStructure();
+            CNNStructure structure = new CNNStructure(28, 10);
             structure.AddLayer(2, 5, ActivationFunctionType.ReLU);
             structure.AddLayer(4, 3, ActivationFunctionType.Sigmoid);
 
-            IConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(28, 10, structure);
+            ConvolutionalNeuralNetwork CNN = new ConvolutionalNeuralNetwork(structure);
             
-            Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Desktop\Code Shit\train.csv");
+            Datapoint[] dataset = ImportDataset(@"C:\Users\gabri\Documents\Code Shit\train.csv");
             for (int i = 0; i < 4; i++)
             {
                 float[,] input = ParseInputData(dataset[RandomRange(10000)].InputData);
@@ -54,8 +55,12 @@ namespace NumImgTest
             Datapoint[] trainset = dataset[0..40000];
             Datapoint[] testset = dataset[40000..42000];
 
-            int[] layers = { 784, 16, 16, 10 };
-            NeuralNetwork neuralNetwork = new NeuralNetwork(layers);
+            MLPStructure structure = new MLPStructure(784);
+            structure.AddLayer(16);
+            structure.AddLayer(16);
+            structure.AddLayer(10);
+
+            MultilayeredPerceptron neuralNetwork = new MultilayeredPerceptron(structure);
             Backpropagation backpropagation = new Backpropagation(neuralNetwork, trainset, testset);
 
             MultilayeredPerceptronSaveLoader mlpS = new MultilayeredPerceptronSaveLoader(neuralNetwork);

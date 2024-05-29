@@ -1,14 +1,14 @@
-﻿using Neural_Network_Library.Networks.MultilayeredPerceptron;
+﻿using Neural_Network_Library.Networks.MLP;
 
 namespace Neural_Network_Library.Backpropagation
 {
     internal class NetworkEvaluator
     {
-        private readonly NeuralNetwork _network;
+        private readonly MultilayeredPerceptron _network;
         private float _precision;
         private float _cost;
 
-        internal NetworkEvaluator(NeuralNetwork network) => _network = network;
+        internal NetworkEvaluator(MultilayeredPerceptron network) => _network = network;
 
         internal float GetPrecision() => _precision;
 

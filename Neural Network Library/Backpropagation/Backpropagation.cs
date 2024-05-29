@@ -1,20 +1,20 @@
-﻿using Neural_Network_Library.Networks.MultilayeredPerceptron;
+﻿using Neural_Network_Library.Networks.MLP;
 
 namespace Neural_Network_Library.Backpropagation
 {
     public class Backpropagation
     {
-        private readonly NeuralNetwork _network;
+        private readonly MultilayeredPerceptron _network;
         private readonly Datapoint[] _trainData;
         private readonly Datapoint[] _testData;
 
-        private readonly Layer[] _networkLayers;
+        private readonly MLPLayer[] _networkLayers;
         private readonly BackpropagationLayer[] _backpropagationLayers;
         private readonly BackpropagationOutputLayer _outputLayer;
 
         private readonly NetworkEvaluator _evaluator;
 
-        public Backpropagation(NeuralNetwork network, Datapoint[] trainData, Datapoint[] testData)
+        public Backpropagation(MultilayeredPerceptron network, Datapoint[] trainData, Datapoint[] testData)
         {
             _trainData = trainData;
             _testData = testData;

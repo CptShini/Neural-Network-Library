@@ -1,4 +1,4 @@
-﻿using Neural_Network_Library.Networks.ConvolutionalNeuralNetwork;
+﻿using Neural_Network_Library.Networks.CNN;
 
 namespace Neural_Network_Library.SaveLoad
 {

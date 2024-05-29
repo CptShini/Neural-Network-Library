@@ -1,4 +1,4 @@
-﻿using Neural_Network_Library.Networks.MultilayeredPerceptron;
+﻿using Neural_Network_Library.Networks.MLP;
 
 namespace Neural_Network_Library.Backpropagation
 {
@@ -6,7 +6,7 @@ namespace Neural_Network_Library.Backpropagation
     {
         private readonly BackpropagationLayer _prevLayer;
 
-        internal BackpropagationHiddenLayer(Layer layer, BackpropagationLayer prevLayer) : base(layer) => _prevLayer = prevLayer;
+        internal BackpropagationHiddenLayer(MLPLayer layer, BackpropagationLayer prevLayer) : base(layer) => _prevLayer = prevLayer;
 
         private protected override float Calculate_da(int k) => _prevLayer.Calculate_NextLayer_da(k);
     }
